@@ -12,7 +12,7 @@ import modelo.enums.Tamanho;
  * @author diego
  */
 public class Categoria {
-    
+
     private Integer id;
     private String nome;
     private Tamanho tamanho;
@@ -58,7 +58,6 @@ public class Categoria {
 
     public void setEmbalagem(Embalagem embalagem) {
         this.embalagem = embalagem;
-    }   
-    
-    
+    }
+
 }
