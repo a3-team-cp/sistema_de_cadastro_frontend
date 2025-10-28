@@ -14,21 +14,24 @@ public class Resposta<T> {
     private String mensagem;
     private T dados;
 
+    public Resposta() {
+    }
+
     public Resposta(String status, String mensagem, T dados) {
         this.status = status;
         this.mensagem = mensagem;
         this.dados = dados;
     }
-    
+
     public String getStatus() {
-        return status; 
+        return status;
     }
-    
+
     public String getMensagem() {
-        return mensagem; 
+        return mensagem;
     }
-    
-    public T getDados() { 
+
+    public T getDados() {
         return dados;
-    }    
+    }
 }
