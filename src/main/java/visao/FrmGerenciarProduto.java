@@ -402,7 +402,8 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
     if (linha == -1) {
         JOptionPane.showMessageDialog(this, "Selecione um produto para alterar.", "Aviso", JOptionPane.WARNING_MESSAGE);
         return;
-    }
+        
+    } 
 
     // Validação dos campos numéricos
     double preco;
