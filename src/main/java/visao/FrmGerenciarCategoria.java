@@ -1,9 +1,19 @@
 package visao;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import controlador.CategoriaControlador;
+import dto.Resposta;
 import java.text.Normalizer;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import modelo.Categoria;
 
 public class FrmGerenciarCategoria extends javax.swing.JFrame {
+
+    private CategoriaControlador categoriaControlador;
+    
+    private ObjectMapper mapper;
 
     private DefaultTableModel tabela;
 
@@ -13,10 +23,12 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
 
     public FrmGerenciarCategoria() {
         initComponents();
-        tabela = new DefaultTableModel(dados, colunas) {
+        this.categoriaControlador = new CategoriaControlador();
+        this.mapper = new ObjectMapper();
+        tabela = new DefaultTableModel(colunas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column != 0; // coluna 0 (ID) não pode ser editada
+                return column != 0; // ID não editável
             }
         };
         JTableCategoria.setModel(tabela);
@@ -29,7 +41,16 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
     }
 
     private void carregarCategoriasNaTela() {
-       
+        Resposta<?> resposta = categoriaControlador.listarCategoria();
+
+        Categoria[] categoriasArray = mapper.convertValue(resposta.getDados(), Categoria[].class);
+
+        List<Categoria> categorias = Arrays.asList(categoriasArray);
+
+        tabela.setRowCount(0);
+        for (Categoria c : categorias) {
+            tabela.addRow(new Object[]{c.getId(), c.getNome(), c.getTamanho(), c.getEmbalagem()});
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -172,8 +193,8 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBNovoGerenciamentoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBNovoGerenciamentoCActionPerformed
- 
-    }//GEN-LAST:event_JBNovoGerenciamentoCActionPerformed
+        FrmGerenciarCategoria cadastro = new FrmGerenciarCategoria();
+        cadastro.setVisible(true);    }//GEN-LAST:event_JBNovoGerenciamentoCActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         carregarCategoriasNaTela();
@@ -186,15 +207,15 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
     }//GEN-LAST:event_JBVoltarCategoriaActionPerformed
 
     private void JBAlterarGerenciamentoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAlterarGerenciamentoCActionPerformed
-      
+
     }//GEN-LAST:event_JBAlterarGerenciamentoCActionPerformed
 
     private void JTableCategoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTableCategoriaMouseClicked
-     
+
     }//GEN-LAST:event_JTableCategoriaMouseClicked
 
     private void JBExcluirGerenciamentoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBExcluirGerenciamentoCActionPerformed
-    
+
     }//GEN-LAST:event_JBExcluirGerenciamentoCActionPerformed
 
 

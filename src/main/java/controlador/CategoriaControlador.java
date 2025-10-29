@@ -12,28 +12,23 @@ public class CategoriaControlador {
 
     private final CategoriaServico servico = new CategoriaServico();
 
-    public void criarCategoria(Categoria categoria) {
-        Resposta<?> resposta = servico.criarCategoria(categoria);
-        System.out.println(resposta.getMensagem());
+   public Resposta<?> criarCategoria(Categoria categoria) {
+        return servico.criarCategoria(categoria);
+    }
+    
+    public Resposta<?> atualizarCategoria(Categoria categoria) {
+        return servico.atualizarCategoria(categoria);
+    }
+    
+    public Resposta<?> deletarCategoria(Integer id) {
+        return servico.deletarCategoria(id);
     }
 
-    public void atualizarCategoria(Categoria categoria) {
-        Resposta<?> resposta = servico.atualizarCategoria(categoria);
-        System.out.println(resposta.getMensagem());
+    public Resposta<?> encontrarCategoria(Categoria categoria) {
+        return servico.encontrarCategoria(categoria);
     }
-
-    public void deletarCategoria(Integer id) {
-        Resposta<?> resposta = servico.deletarCategoria(id);
-        System.out.println(resposta.getMensagem());
-    }
-
-    public void encontrarCategoria(Categoria categoria) {
-        Resposta<?> resposta = servico.encontrarCategoria(categoria);
-        System.out.println(resposta.getMensagem());
-    }
-
-    public void listarCategoria() {
-        Resposta<?> resposta = servico.listarCategoria();
-        System.out.println(resposta.getMensagem());
+    
+    public Resposta<?> listarCategoria() {
+        return servico.listarCategoria();
     }
 }
