@@ -39,12 +39,12 @@
                           <Component id="JLGerenciamentoProdutos" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="JBNovoGerenciamentoC" min="-2" max="-2" attributes="0"/>
+                                  <Component id="JTFNomeDeCategoria" alignment="1" min="-2" pref="134" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Component id="BtnCriarCategoria" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="JBAlterarGerenciamentoC" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="JTFNomeDeCategoria" min="-2" pref="134" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -54,9 +54,9 @@
                                       <Component id="JBVoltarCategoria" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <Component id="JCBTipoTamanhoGerenciamentoC" min="-2" pref="133" max="-2" attributes="0"/>
+                                      <Component id="CBBoxCatTamanho" min="-2" pref="133" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                                      <Component id="JCBTipoEmbalagemGerenciamentoC" min="-2" pref="136" max="-2" attributes="0"/>
+                                      <Component id="CBBoxCatTipo" min="-2" pref="136" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -74,17 +74,17 @@
               <Component id="JLGerenciamentoProdutos" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="146" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="JBNovoGerenciamentoC" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="JBAlterarGerenciamentoC" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="JBExcluirGerenciamentoC" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="JBVoltarCategoria" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="BtnCriarCategoria" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="JCBTipoEmbalagemGerenciamentoC" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="CBBoxCatTipo" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="JLNomeGerenciamentoC" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="JTFNomeDeCategoria" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="JCBTipoTamanhoGerenciamentoC" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="CBBoxCatTamanho" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="218" max="-2" attributes="0"/>
@@ -158,14 +158,6 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="JBNovoGerenciamentoC">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Novo"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JBNovoGerenciamentoCActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JButton" name="JBAlterarGerenciamentoC">
       <Properties>
         <Property name="text" type="java.lang.String" value="Alterar"/>
@@ -190,7 +182,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JBVoltarCategoriaActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JComboBox" name="JCBTipoEmbalagemGerenciamentoC">
+    <Component class="javax.swing.JComboBox" name="CBBoxCatTipo">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="3">
@@ -206,7 +198,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="JTFNomeDeCategoria">
     </Component>
-    <Component class="javax.swing.JComboBox" name="JCBTipoTamanhoGerenciamentoC">
+    <Component class="javax.swing.JComboBox" name="CBBoxCatTamanho">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="3">
@@ -219,6 +211,14 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JButton" name="BtnCriarCategoria">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Novo"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnCriarCategoriaActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

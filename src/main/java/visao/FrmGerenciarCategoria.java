@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import modelo.Categoria;
+import modelo.enums.Embalagem;
+import modelo.enums.Tamanho;
+import util.TextoUtil;
 
 public class FrmGerenciarCategoria extends javax.swing.JFrame {
 
@@ -61,13 +64,13 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
         JLNomeGerenciamentoC = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         JTableCategoria = new javax.swing.JTable();
-        JBNovoGerenciamentoC = new javax.swing.JButton();
         JBAlterarGerenciamentoC = new javax.swing.JButton();
         JBExcluirGerenciamentoC = new javax.swing.JButton();
         JBVoltarCategoria = new javax.swing.JButton();
-        JCBTipoEmbalagemGerenciamentoC = new javax.swing.JComboBox<>();
+        CBBoxCatTipo = new javax.swing.JComboBox<>();
         JTFNomeDeCategoria = new javax.swing.JTextField();
-        JCBTipoTamanhoGerenciamentoC = new javax.swing.JComboBox<>();
+        CBBoxCatTamanho = new javax.swing.JComboBox<>();
+        BtnCriarCategoria = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gerenciar Categoria");
@@ -102,13 +105,6 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(JTableCategoria);
 
-        JBNovoGerenciamentoC.setText("Novo");
-        JBNovoGerenciamentoC.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JBNovoGerenciamentoCActionPerformed(evt);
-            }
-        });
-
         JBAlterarGerenciamentoC.setText("Alterar");
         JBAlterarGerenciamentoC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -130,9 +126,16 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
             }
         });
 
-        JCBTipoEmbalagemGerenciamentoC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lata", "Vidro", "Plástico" }));
+        CBBoxCatTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lata", "Vidro", "Plástico" }));
 
-        JCBTipoTamanhoGerenciamentoC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pequeno", "Médio", "Grande" }));
+        CBBoxCatTamanho.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pequeno", "Médio", "Grande" }));
+
+        BtnCriarCategoria.setText("Novo");
+        BtnCriarCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnCriarCategoriaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -149,11 +152,11 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
                             .addComponent(JLGerenciamentoProdutos)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(JTFNomeDeCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(JBNovoGerenciamentoC)
+                                        .addComponent(BtnCriarCategoria)
                                         .addGap(18, 18, 18)
-                                        .addComponent(JBAlterarGerenciamentoC))
-                                    .addComponent(JTFNomeDeCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(JBAlterarGerenciamentoC)))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -161,9 +164,9 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(JBVoltarCategoria))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(JCBTipoTamanhoGerenciamentoC, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(CBBoxCatTamanho, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(12, 12, 12)
-                                        .addComponent(JCBTipoEmbalagemGerenciamentoC, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                        .addComponent(CBBoxCatTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                 .addContainerGap(96, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -173,16 +176,16 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
                 .addComponent(JLGerenciamentoProdutos)
                 .addGap(146, 146, 146)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JBNovoGerenciamentoC)
                     .addComponent(JBAlterarGerenciamentoC)
                     .addComponent(JBExcluirGerenciamentoC)
-                    .addComponent(JBVoltarCategoria))
+                    .addComponent(JBVoltarCategoria)
+                    .addComponent(BtnCriarCategoria))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JCBTipoEmbalagemGerenciamentoC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CBBoxCatTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JLNomeGerenciamentoC)
                     .addComponent(JTFNomeDeCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JCBTipoTamanhoGerenciamentoC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(CBBoxCatTamanho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(97, Short.MAX_VALUE))
@@ -191,10 +194,6 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void JBNovoGerenciamentoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBNovoGerenciamentoCActionPerformed
-        FrmGerenciarCategoria cadastro = new FrmGerenciarCategoria();
-        cadastro.setVisible(true);    }//GEN-LAST:event_JBNovoGerenciamentoCActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         carregarCategoriasNaTela();
@@ -218,14 +217,31 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
 
     }//GEN-LAST:event_JBExcluirGerenciamentoCActionPerformed
 
+    private void BtnCriarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCriarCategoriaActionPerformed
+        String nome = JTFNomeDeCategoria.getText();
+        
+        String strTamanho = CBBoxCatTamanho.getSelectedItem().toString().toUpperCase();
+        String tamanhoNormalizado = TextoUtil.removerAcentos(strTamanho);
+        Tamanho tamanho = Tamanho.valueOf(tamanhoNormalizado);
+        
+        String strEmbalagem = CBBoxCatTipo.getSelectedItem().toString().toUpperCase();
+        String embalagemNormalizado = TextoUtil.removerAcentos(strEmbalagem);
+        Embalagem embalagem = Embalagem.valueOf(embalagemNormalizado);
+        
+        
+        Categoria cat = new Categoria(null, nome, tamanho, embalagem);
+        categoriaControlador.criarCategoria(cat);
+        carregarCategoriasNaTela();
+    }//GEN-LAST:event_BtnCriarCategoriaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnCriarCategoria;
+    private javax.swing.JComboBox<String> CBBoxCatTamanho;
+    private javax.swing.JComboBox<String> CBBoxCatTipo;
     private javax.swing.JButton JBAlterarGerenciamentoC;
     private javax.swing.JButton JBExcluirGerenciamentoC;
-    private javax.swing.JButton JBNovoGerenciamentoC;
     private javax.swing.JButton JBVoltarCategoria;
-    private javax.swing.JComboBox<String> JCBTipoEmbalagemGerenciamentoC;
-    private javax.swing.JComboBox<String> JCBTipoTamanhoGerenciamentoC;
     private javax.swing.JLabel JLGerenciamentoProdutos;
     private javax.swing.JLabel JLNomeGerenciamentoC;
     private javax.swing.JTextField JTFNomeDeCategoria;
