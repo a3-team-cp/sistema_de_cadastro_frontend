@@ -19,6 +19,10 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
     private ObjectMapper mapper;
 
     private DefaultTableModel tabela;
+    
+    private Integer selectedId = null;
+    private int selectedModelRow = -1;
+
 
     private Object[][] dados = new Object[0][0];
 
@@ -210,7 +214,39 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
     }//GEN-LAST:event_JBAlterarGerenciamentoCActionPerformed
 
     private void JTableCategoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTableCategoriaMouseClicked
+             int linhaSelecionada = JTableCategoria.getSelectedRow();
+    if (linhaSelecionada != -1) {
+        // Pega os valores da linha
+        String nome = JTableCategoria.getValueAt(linhaSelecionada, 1).toString();
+        String tamanho = JTableCategoria.getValueAt(linhaSelecionada, 2).toString();
+        String embalagem = JTableCategoria.getValueAt(linhaSelecionada, 3).toString();
 
+        // Coloca no campo de texto
+        JTFNomeDeCategoria.setText(nome);
+
+        // Normaliza para comparação segura
+        String tamanhoNorm = TextoUtil.normalizar(tamanho);
+        String embalagemNorm = TextoUtil.normalizar(embalagem);
+
+        // Seleciona o tamanho na comboBox
+        for (int i = 0; i < CBBoxCatTamanho.getItemCount(); i++) {
+            String itemNorm = TextoUtil.normalizar(CBBoxCatTamanho.getItemAt(i));
+            if (itemNorm.equals(tamanhoNorm)) {
+                CBBoxCatTamanho.setSelectedIndex(i);
+                break;
+            }
+        }
+
+        // Seleciona a embalagem na comboBox
+        for (int i = 0; i < CBBoxCatTipo.getItemCount(); i++) {
+            String itemNorm = TextoUtil.normalizar(CBBoxCatTipo.getItemAt(i));
+            if (itemNorm.equals(embalagemNorm)) {
+                CBBoxCatTipo.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
+             
     }//GEN-LAST:event_JTableCategoriaMouseClicked
 
     private void JBExcluirGerenciamentoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBExcluirGerenciamentoCActionPerformed
@@ -233,7 +269,8 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
         categoriaControlador.criarCategoria(cat);
         carregarCategoriasNaTela();
     }//GEN-LAST:event_BtnCriarCategoriaActionPerformed
-
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnCriarCategoria;

@@ -18,6 +18,13 @@ public class TextoUtil {
         
         return normalizado.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
+    
+    public static String normalizar(String texto) {
+    if (texto == null) return "";
+    String semAcentos = Normalizer.normalize(texto, Normalizer.Form.NFD)
+            .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+    return semAcentos.trim().toUpperCase();
+}
 
     
 }
