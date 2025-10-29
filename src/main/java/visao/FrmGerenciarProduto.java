@@ -1,14 +1,23 @@
 package visao;
 
-import java.util.Date;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import controlador.CategoriaControlador;
+import controlador.ProdutoControlador;
+import dto.Resposta;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modelo.Categoria;
+import modelo.Produto;
 
 public class FrmGerenciarProduto extends javax.swing.JFrame {
 
     private DefaultTableModel tabela;
+    private ProdutoControlador produtoControlador;
+    private CategoriaControlador categoriaControlador;
+    private ObjectMapper mapper;
+    private Map<String, Integer> categoriasMap;
 
     private Object[][] dados = new Object[0][0];
 
@@ -16,6 +25,10 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
 
     public FrmGerenciarProduto() {
         initComponents();
+        this.produtoControlador = new ProdutoControlador();
+        this.categoriaControlador = new CategoriaControlador();
+        this.mapper = new ObjectMapper();
+        this.categoriasMap = new HashMap<>();
         carregarCategoriasNoComboBox();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -31,11 +44,19 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
 
     private void carregarCategoriasNoComboBox() {
         ComboBoxCategoria.removeAllItems();
+        categoriasMap.clear();
 
+        Resposta<?> resposta = categoriaControlador.listarCategoria();
+        Categoria[] categoriasArray = mapper.convertValue(resposta.getDados(), Categoria[].class);
+
+        for (Categoria cat : categoriasArray) {
+            ComboBoxCategoria.addItem(cat.getNome());
+            categoriasMap.put(cat.getNome(), cat.getId());
+        }
     }
 
     private void carregarProdutosNaTela() {
-      
+
     }
 
     @SuppressWarnings("unchecked")
@@ -298,7 +319,29 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
 
 
     private void JBNovoProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBNovoProdutoActionPerformed
-     
+        String nome = JTFNomeProduto.getText().trim();
+        Double precoUni = Double.valueOf(JTFPrecoUnitario.getText().trim());
+        String unidade = (String) ComboBoxUnidade.getSelectedItem();
+        Integer estoque = Integer.valueOf(JTFQtdEstoque.getText().trim());
+        Integer minima = Integer.valueOf(JTFQtdMinima.getText().trim());
+        Integer maxima = Integer.valueOf(JTFQtdMaxima.getText().trim());
+
+        // Pega o id da categoria pelo nome selecionado
+        String nomeCategoria = (String) ComboBoxCategoria.getSelectedItem();
+        Integer categoriaId = categoriasMap.get(nomeCategoria);
+
+        Produto produto = new Produto(null,nome,precoUni,unidade,categoriaId,estoque,minima,maxima);
+
+        // Chama o controlador para criar o produto
+        produtoControlador.criarProduto(produto);
+        JTFNomeProduto.setText("");
+        JTFPrecoUnitario.setText("");
+        JTFQtdEstoque.setText("");
+        JTFQtdMinima.setText("");
+        JTFQtdMaxima.setText("");
+        ComboBoxUnidade.setSelectedIndex(0);
+        ComboBoxCategoria.setSelectedIndex(0);
+
     }//GEN-LAST:event_JBNovoProdutoActionPerformed
 
 
@@ -333,22 +376,22 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
 
 
     private void JBAlterarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAlterarProdutoActionPerformed
-    
+
     }//GEN-LAST:event_JBAlterarProdutoActionPerformed
 
 
     private void JBExcluirProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBExcluirProdutoActionPerformed
-       
+
     }//GEN-LAST:event_JBExcluirProdutoActionPerformed
 
 
     private void jBEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEntradaActionPerformed
-       
+
     }//GEN-LAST:event_jBEntradaActionPerformed
 
 
     private void jBSaidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSaidaActionPerformed
-       
+
     }//GEN-LAST:event_jBSaidaActionPerformed
 
 
