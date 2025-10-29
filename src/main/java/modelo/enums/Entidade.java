@@ -6,6 +6,7 @@ package modelo.enums;
  */
 public enum Entidade {
     PRODUTO,
-    CATEGORIA;
+    CATEGORIA,
+    REGISTRO;
 
 }
