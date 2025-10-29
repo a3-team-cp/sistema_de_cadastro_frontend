@@ -210,7 +210,25 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
     }//GEN-LAST:event_JBVoltarCategoriaActionPerformed
 
     private void JBAlterarGerenciamentoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAlterarGerenciamentoCActionPerformed
-
+        Integer linhaSelecionada = JTableCategoria.getSelectedRow();    
+        int id = (Integer) JTableCategoria.getValueAt(linhaSelecionada, 0);
+        
+        
+         String nome = JTFNomeDeCategoria.getText();
+        
+        String strTamanho = CBBoxCatTamanho.getSelectedItem().toString().toUpperCase();
+        String tamanhoNormalizado = TextoUtil.removerAcentos(strTamanho);
+        Tamanho tamanho = Tamanho.valueOf(tamanhoNormalizado);
+        
+        String strEmbalagem = CBBoxCatTipo.getSelectedItem().toString().toUpperCase();
+        String embalagemNormalizado = TextoUtil.removerAcentos(strEmbalagem);
+        Embalagem embalagem = Embalagem.valueOf(embalagemNormalizado);
+        
+        
+        Categoria cat = new Categoria(id, nome, tamanho, embalagem);
+        
+        categoriaControlador.atualizarCategoria(cat);
+        carregarCategoriasNaTela();  
     }//GEN-LAST:event_JBAlterarGerenciamentoCActionPerformed
 
     private void JTableCategoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTableCategoriaMouseClicked
