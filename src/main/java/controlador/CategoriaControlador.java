@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controlador;
 
 import dto.Resposta;
@@ -10,16 +6,34 @@ import servico.CategoriaServico;
 
 /**
  *
- * @author diego
+ * @author Lorenzo Bruscato
  */
 public class CategoriaControlador {
-    
+
     private final CategoriaServico servico = new CategoriaServico();
 
     public void criarCategoria(Categoria categoria) {
-        Resposta<?> resposta = servico.criar(categoria);
+        Resposta<?> resposta = servico.criarCategoria(categoria);
         System.out.println(resposta.getMensagem());
     }
-    
-    
+
+    public void atualizarCategoria(Categoria categoria) {
+        Resposta<?> resposta = servico.atualizarCategoria(categoria);
+        System.out.println(resposta.getMensagem());
+    }
+
+    public void deletarCategoria(Integer id) {
+        Resposta<?> resposta = servico.deletarCategoria(id);
+        System.out.println(resposta.getMensagem());
+    }
+
+    public void encontrarCategoria(Categoria categoria) {
+        Resposta<?> resposta = servico.encontrarCategoria(categoria);
+        System.out.println(resposta.getMensagem());
+    }
+
+    public void listarCategoria() {
+        Resposta<?> resposta = servico.listarCategoria();
+        System.out.println(resposta.getMensagem());
+    }
 }

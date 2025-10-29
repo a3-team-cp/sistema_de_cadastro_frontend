@@ -1,7 +1,3 @@
-    /*
-     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-     * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
-     */
     package servico;
 
     import dto.Requisicao;
@@ -13,14 +9,35 @@
 
     /**
      *
-     * @author diego
+     * @author Lorenzo Bruscato
      */
     public class CategoriaServico {
 
         private Categoria categotia;
 
-       public Resposta<?> criar(Categoria categoria) {
+        public Resposta<?> criarCategoria(Categoria categoria) {
         Requisicao<Categoria> req = new Requisicao<>(Acao.CRIAR, Entidade.CATEGORIA, categoria);
+        return ClientSocket.enviarRequisicao(req);
+    }
+
+    public Resposta<?> atualizarCategoria(Categoria categoria) {
+        Requisicao<Categoria> req = new Requisicao<>(Acao.ATUALIZAR, Entidade.CATEGORIA, categoria);
+        return ClientSocket.enviarRequisicao(req);
+    }
+
+    public Resposta<?> deletarCategoria(Integer id) {
+        Categoria categoria = new Categoria(id, null, null, null);
+        Requisicao<Categoria> req = new Requisicao<>(Acao.DELETAR, Entidade.CATEGORIA, categoria);
+        return ClientSocket.enviarRequisicao(req);
+    }
+
+    public Resposta<?> encontrarCategoria(Categoria categoria) {
+        Requisicao<Categoria> req = new Requisicao<>(Acao.ENCONTRAR, Entidade.CATEGORIA, categoria);
+        return ClientSocket.enviarRequisicao(req);
+    }
+
+    public Resposta<?> listarCategoria() {
+        Requisicao<Void> req = new Requisicao<>(Acao.LISTAR, Entidade.CATEGORIA, null);
         return ClientSocket.enviarRequisicao(req);
     }
 }
