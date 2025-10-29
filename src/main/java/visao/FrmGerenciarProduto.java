@@ -1,4 +1,3 @@
-
 package visao;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +17,6 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import modelo.Categoria;
 import modelo.Produto;
-
 
 public class FrmGerenciarProduto extends javax.swing.JFrame {
 
@@ -384,61 +382,85 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
 
     private void JTableProdutosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTableProdutosMouseClicked
         int linha = JTableProdutos.getSelectedRow();
-    if (linha == -1) return;
+        if (linha == -1) {
+            return;
+        }
 
-    JTFNomeProduto.setText(JTableProdutos.getValueAt(linha, 1) != null ? JTableProdutos.getValueAt(linha, 1).toString() : "");
-    JTFPrecoUnitario.setText(JTableProdutos.getValueAt(linha, 2) != null ? JTableProdutos.getValueAt(linha, 2).toString() : "");
-    ComboBoxUnidade.setSelectedItem(JTableProdutos.getValueAt(linha, 3) != null ? JTableProdutos.getValueAt(linha, 3).toString() : "");
-    JTFQtdEstoque.setText(JTableProdutos.getValueAt(linha, 4) != null ? JTableProdutos.getValueAt(linha, 4).toString() : "");
-    JTFQtdMinima.setText(JTableProdutos.getValueAt(linha, 5) != null ? JTableProdutos.getValueAt(linha, 5).toString() : "");
-    JTFQtdMaxima.setText(JTableProdutos.getValueAt(linha, 6) != null ? JTableProdutos.getValueAt(linha, 6).toString() : "");
-    ComboBoxCategoria.setSelectedItem(JTableProdutos.getValueAt(linha, 7) != null ? JTableProdutos.getValueAt(linha, 7).toString() : "");
+        JTFNomeProduto.setText(JTableProdutos.getValueAt(linha, 1) != null ? JTableProdutos.getValueAt(linha, 1).toString() : "");
+        JTFPrecoUnitario.setText(JTableProdutos.getValueAt(linha, 2) != null ? JTableProdutos.getValueAt(linha, 2).toString() : "");
+        ComboBoxUnidade.setSelectedItem(JTableProdutos.getValueAt(linha, 3) != null ? JTableProdutos.getValueAt(linha, 3).toString() : "");
+        JTFQtdEstoque.setText(JTableProdutos.getValueAt(linha, 4) != null ? JTableProdutos.getValueAt(linha, 4).toString() : "");
+        JTFQtdMinima.setText(JTableProdutos.getValueAt(linha, 5) != null ? JTableProdutos.getValueAt(linha, 5).toString() : "");
+        JTFQtdMaxima.setText(JTableProdutos.getValueAt(linha, 6) != null ? JTableProdutos.getValueAt(linha, 6).toString() : "");
+        ComboBoxCategoria.setSelectedItem(JTableProdutos.getValueAt(linha, 7) != null ? JTableProdutos.getValueAt(linha, 7).toString() : "");
 
     }//GEN-LAST:event_JTableProdutosMouseClicked
 
 
     private void JBAlterarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAlterarProdutoActionPerformed
         int linha = JTableProdutos.getSelectedRow();
-    if (linha == -1) {
-        JOptionPane.showMessageDialog(this, "Selecione um produto para alterar.", "Aviso", JOptionPane.WARNING_MESSAGE);
-        return;
-        
-    } 
+        if (linha == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um produto para alterar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
 
-    // Validação dos campos numéricos
-    double preco;
-    int qtdEstoque, qtdMin, qtdMax;
+        }
 
-    try {
-        preco = Double.parseDouble(JTFPrecoUnitario.getText());
-        qtdEstoque = Integer.parseInt(JTFQtdEstoque.getText());
-        qtdMin = Integer.parseInt(JTFQtdMinima.getText());
-        qtdMax = Integer.parseInt(JTFQtdMaxima.getText());
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Valores numéricos inválidos!", "Erro", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        // Validação dos campos numéricos
+        double preco;
+        int qtdEstoque, qtdMin, qtdMax;
 
-    // Atualiza os valores na tabela
-    JTableProdutos.setValueAt(JTFNomeProduto.getText(), linha, 1);
-    JTableProdutos.setValueAt(preco, linha, 2);
-    JTableProdutos.setValueAt(ComboBoxUnidade.getSelectedItem().toString(), linha, 3);
-    JTableProdutos.setValueAt(qtdEstoque, linha, 4);
-    JTableProdutos.setValueAt(qtdMin, linha, 5);
-    JTableProdutos.setValueAt(qtdMax, linha, 6);
-    JTableProdutos.setValueAt(ComboBoxCategoria.getSelectedItem().toString(), linha, 7);
+        try {
+            preco = Double.parseDouble(JTFPrecoUnitario.getText());
+            qtdEstoque = Integer.parseInt(JTFQtdEstoque.getText());
+            qtdMin = Integer.parseInt(JTFQtdMinima.getText());
+            qtdMax = Integer.parseInt(JTFQtdMaxima.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Valores numéricos inválidos!", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    JOptionPane.showMessageDialog(this, "Produto alterado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        // Atualiza os valores na tabela
+        JTableProdutos.setValueAt(JTFNomeProduto.getText(), linha, 1);
+        JTableProdutos.setValueAt(preco, linha, 2);
+        JTableProdutos.setValueAt(ComboBoxUnidade.getSelectedItem().toString(), linha, 3);
+        JTableProdutos.setValueAt(qtdEstoque, linha, 4);
+        JTableProdutos.setValueAt(qtdMin, linha, 5);
+        JTableProdutos.setValueAt(qtdMax, linha, 6);
+        JTableProdutos.setValueAt(ComboBoxCategoria.getSelectedItem().toString(), linha, 7);
+
+        JOptionPane.showMessageDialog(this, "Produto alterado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 
     }//GEN-LAST:event_JBAlterarProdutoActionPerformed
 
 
     private void JBExcluirProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBExcluirProdutoActionPerformed
         int linha = JTableProdutos.getSelectedRow();
-        if (linha >= 0) {
-            Integer id = (Integer) JTableProdutos.getValueAt(linha, 0);
-            categoriaControlador.deletarCategoria(id);
-            carregarProdutosNaTela();
+        if (linha == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um produto para excluir.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Confirmação antes de excluir
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Tem certeza que deseja excluir este produto?",
+                "Confirmação",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Remove a linha da tabela
+            DefaultTableModel model = (DefaultTableModel) JTableProdutos.getModel();
+            model.removeRow(linha);
+
+            // Limpa os campos de texto e combos
+            JTFNomeProduto.setText("");
+            JTFPrecoUnitario.setText("");
+            ComboBoxUnidade.setSelectedIndex(0);
+            JTFQtdEstoque.setText("");
+            JTFQtdMinima.setText("");
+            JTFQtdMaxima.setText("");
+            ComboBoxCategoria.setSelectedIndex(0);
+
+            JOptionPane.showMessageDialog(this, "Produto excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_JBExcluirProdutoActionPerformed
 
