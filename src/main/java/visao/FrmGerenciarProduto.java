@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import controlador.CategoriaControlador;
 import controlador.ProdutoControlador;
 import dto.Resposta;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
@@ -56,7 +58,35 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
     }
 
     private void carregarProdutosNaTela() {
+        tabela.setRowCount(0);
 
+        Resposta<?> resposta = produtoControlador.listarProduto();
+        Produto[] produtosArray = mapper.convertValue(resposta.getDados(), Produto[].class);
+
+        Resposta<?> respostaCat = categoriaControlador.listarCategoria();
+        Categoria[] categoriasArray = mapper.convertValue(respostaCat.getDados(), Categoria[].class);
+
+        Map<Integer, String> categoriasMapLocal = new HashMap<>();
+        for (Categoria c : categoriasArray) {
+            categoriasMapLocal.put(c.getId(), c.getNome());
+        }
+
+        for (Produto p : produtosArray) {
+            if (p.getId() == null) {
+                continue; // ignora produtos sem id
+            }
+            String nomeCategoria = categoriasMapLocal.get(p.getCategoriaId());
+            tabela.addRow(new Object[]{
+                p.getId(),
+                p.getNome(),
+                p.getPreco(),
+                p.getUnidade(),
+                p.getQuantidade(),
+                p.getQuantidadeMinima(),
+                p.getQuantidadeMaxima(),
+                nomeCategoria
+            });
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -330,7 +360,7 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
         String nomeCategoria = (String) ComboBoxCategoria.getSelectedItem();
         Integer categoriaId = categoriasMap.get(nomeCategoria);
 
-        Produto produto = new Produto(null,nome,precoUni,unidade,categoriaId,estoque,minima,maxima);
+        Produto produto = new Produto(null, nome, precoUni, unidade, categoriaId, estoque, minima, maxima);
 
         // Chama o controlador para criar o produto
         produtoControlador.criarProduto(produto);
@@ -381,7 +411,7 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
 
 
     private void JBExcluirProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBExcluirProdutoActionPerformed
-
+        
     }//GEN-LAST:event_JBExcluirProdutoActionPerformed
 
 

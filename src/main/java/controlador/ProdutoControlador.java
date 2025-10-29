@@ -12,28 +12,23 @@ public class ProdutoControlador {
 
     private final ProdutoServico servico = new ProdutoServico();
 
-    public void criarProduto(Produto produto) {
-        Resposta<?> resposta = servico.criarProduto(produto);
-        System.out.println(resposta.getMensagem());
+    public Resposta<?> criarProduto(Produto produto) {
+        return servico.criarProduto(produto);
     }
 
-    public void atualizarProduto(Produto produto) {
-        Resposta<?> resposta = servico.atualizarProduto(produto);
-        System.out.println(resposta.getMensagem());
+    public Resposta<?> atualizarProduto(Produto produto) {
+        return servico.atualizarProduto(produto);
     }
 
-    public void deletarProduto(Integer id) {
-        Resposta<?> resposta = servico.deletarProduto(id);
-        System.out.println(resposta.getMensagem());
+    public Resposta<?> deletarProduto(Integer id) {
+        return servico.deletarProduto(id);
     }
 
-    public void encontrarProduto(Produto produto) {
-        Resposta<?> resposta = servico.encontrarProduto(produto);
-        System.out.println(resposta.getMensagem());
+    public Resposta<?> encontrarProduto(Produto produto) {
+        return servico.encontrarProduto(produto);
     }
 
-    public void listarProduto() {
-        Resposta<?> resposta = servico.listarProduto();
-        System.out.println(resposta.getMensagem());
+    public Resposta<?> listarProduto() {
+        return servico.listarProduto();
     }
 }

@@ -23,7 +23,7 @@ public class Produto {
     }
 
     public Produto(Integer id, String nome, Double preco, String unidade, Integer categoriaId, Integer quantidade, Integer quantidadeMinima, Integer quantidadeMaxima) {
-        this.id = id;
+        this.id = null;
         this.nome = nome;
         this.preco = preco;
         this.unidade = unidade;
