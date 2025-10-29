@@ -15,16 +15,10 @@ import util.TextoUtil;
 public class FrmGerenciarCategoria extends javax.swing.JFrame {
 
     private CategoriaControlador categoriaControlador;
-    
+
     private ObjectMapper mapper;
 
     private DefaultTableModel tabela;
-    
-    private Integer selectedId = null;
-    private int selectedModelRow = -1;
-
-
-    private Object[][] dados = new Object[0][0];
 
     private String[] colunas = {"ID", "Nome", "Tamanho", "Embalagem"};
 
@@ -210,85 +204,86 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
     }//GEN-LAST:event_JBVoltarCategoriaActionPerformed
 
     private void JBAlterarGerenciamentoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAlterarGerenciamentoCActionPerformed
-        Integer linhaSelecionada = JTableCategoria.getSelectedRow();    
+        Integer linhaSelecionada = JTableCategoria.getSelectedRow();
         int id = (Integer) JTableCategoria.getValueAt(linhaSelecionada, 0);
-        
-        
-         String nome = JTFNomeDeCategoria.getText();
-        
+
+        String nome = JTFNomeDeCategoria.getText();
+
         String strTamanho = CBBoxCatTamanho.getSelectedItem().toString().toUpperCase();
         String tamanhoNormalizado = TextoUtil.removerAcentos(strTamanho);
         Tamanho tamanho = Tamanho.valueOf(tamanhoNormalizado);
-        
+
         String strEmbalagem = CBBoxCatTipo.getSelectedItem().toString().toUpperCase();
         String embalagemNormalizado = TextoUtil.removerAcentos(strEmbalagem);
         Embalagem embalagem = Embalagem.valueOf(embalagemNormalizado);
-        
-        
+
         Categoria cat = new Categoria(id, nome, tamanho, embalagem);
-        
+
         categoriaControlador.atualizarCategoria(cat);
-        carregarCategoriasNaTela();  
+        carregarCategoriasNaTela();
     }//GEN-LAST:event_JBAlterarGerenciamentoCActionPerformed
 
     private void JTableCategoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTableCategoriaMouseClicked
-             int linhaSelecionada = JTableCategoria.getSelectedRow();
-    if (linhaSelecionada != -1) {
-        // Pega os valores da linha
-        String nome = JTableCategoria.getValueAt(linhaSelecionada, 1).toString();
-        String tamanho = JTableCategoria.getValueAt(linhaSelecionada, 2).toString();
-        String embalagem = JTableCategoria.getValueAt(linhaSelecionada, 3).toString();
+        int linhaSelecionada = JTableCategoria.getSelectedRow();
+        if (linhaSelecionada != -1) {
+            // Pega os valores da linha
+            String nome = JTableCategoria.getValueAt(linhaSelecionada, 1).toString();
+            String tamanho = JTableCategoria.getValueAt(linhaSelecionada, 2).toString();
+            String embalagem = JTableCategoria.getValueAt(linhaSelecionada, 3).toString();
 
-        // Coloca no campo de texto
-        JTFNomeDeCategoria.setText(nome);
+            // Coloca no campo de texto
+            JTFNomeDeCategoria.setText(nome);
 
-        // Normaliza para comparação segura
-        String tamanhoNorm = TextoUtil.normalizar(tamanho);
-        String embalagemNorm = TextoUtil.normalizar(embalagem);
+            // Normaliza para comparação segura
+            String tamanhoNorm = TextoUtil.normalizar(tamanho);
+            String embalagemNorm = TextoUtil.normalizar(embalagem);
 
-        // Seleciona o tamanho na comboBox
-        for (int i = 0; i < CBBoxCatTamanho.getItemCount(); i++) {
-            String itemNorm = TextoUtil.normalizar(CBBoxCatTamanho.getItemAt(i));
-            if (itemNorm.equals(tamanhoNorm)) {
-                CBBoxCatTamanho.setSelectedIndex(i);
-                break;
+            // Seleciona o tamanho na comboBox
+            for (int i = 0; i < CBBoxCatTamanho.getItemCount(); i++) {
+                String itemNorm = TextoUtil.normalizar(CBBoxCatTamanho.getItemAt(i));
+                if (itemNorm.equals(tamanhoNorm)) {
+                    CBBoxCatTamanho.setSelectedIndex(i);
+                    break;
+                }
+            }
+
+            // Seleciona a embalagem na comboBox
+            for (int i = 0; i < CBBoxCatTipo.getItemCount(); i++) {
+                String itemNorm = TextoUtil.normalizar(CBBoxCatTipo.getItemAt(i));
+                if (itemNorm.equals(embalagemNorm)) {
+                    CBBoxCatTipo.setSelectedIndex(i);
+                    break;
+                }
             }
         }
 
-        // Seleciona a embalagem na comboBox
-        for (int i = 0; i < CBBoxCatTipo.getItemCount(); i++) {
-            String itemNorm = TextoUtil.normalizar(CBBoxCatTipo.getItemAt(i));
-            if (itemNorm.equals(embalagemNorm)) {
-                CBBoxCatTipo.setSelectedIndex(i);
-                break;
-            }
-        }
-    }
-             
     }//GEN-LAST:event_JTableCategoriaMouseClicked
 
     private void JBExcluirGerenciamentoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBExcluirGerenciamentoCActionPerformed
-
+        int linha = JTableCategoria.getSelectedRow();
+        if (linha >= 0) {
+            Integer id = (Integer) JTableCategoria.getValueAt(linha, 0);
+            categoriaControlador.deletarCategoria(id);
+            carregarCategoriasNaTela();
+        }
     }//GEN-LAST:event_JBExcluirGerenciamentoCActionPerformed
 
     private void BtnCriarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCriarCategoriaActionPerformed
         String nome = JTFNomeDeCategoria.getText();
-        
+
         String strTamanho = CBBoxCatTamanho.getSelectedItem().toString().toUpperCase();
         String tamanhoNormalizado = TextoUtil.removerAcentos(strTamanho);
         Tamanho tamanho = Tamanho.valueOf(tamanhoNormalizado);
-        
+
         String strEmbalagem = CBBoxCatTipo.getSelectedItem().toString().toUpperCase();
         String embalagemNormalizado = TextoUtil.removerAcentos(strEmbalagem);
         Embalagem embalagem = Embalagem.valueOf(embalagemNormalizado);
-        
-        
+
         Categoria cat = new Categoria(null, nome, tamanho, embalagem);
         categoriaControlador.criarCategoria(cat);
         carregarCategoriasNaTela();
     }//GEN-LAST:event_BtnCriarCategoriaActionPerformed
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnCriarCategoria;
