@@ -49,6 +49,57 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
         carregarProdutosNaTela();
     }
 
+    private void alterarEstoque(boolean entrada) {
+        int linha = JTableProdutos.getSelectedRow();
+        if (linha == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um produto.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            // Pega o valor digitado
+            int valor = Integer.parseInt(jTEntradaSaida.getText().trim());
+            if (!entrada) {
+                valor *= -1; // se for saída, torna negativo
+            }
+
+            // Pega o ID do produto selecionado
+            Integer id = (Integer) JTableProdutos.getValueAt(linha, 0);
+
+            // Cria um produto só com o ID
+            Produto produtoParaBuscar = new Produto();
+            produtoParaBuscar.setId(id);
+
+            // Busca o produto no banco
+            Resposta<?> resposta = produtoControlador.encontrarProduto(produtoParaBuscar);
+            Produto p = new ObjectMapper().convertValue(resposta.getDados(), Produto.class);
+
+            if (p == null) {
+                JOptionPane.showMessageDialog(this, "Produto não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Atualiza a quantidade
+            p.setQuantidade(p.getQuantidade() + valor);
+
+            // Salva a alteração no banco
+            produtoControlador.atualizarProduto(p);
+
+            // Atualiza a tabela na tela
+            carregarProdutosNaTela();
+
+            // Limpa o campo de entrada
+            jTEntradaSaida.setText("");
+
+            // Mensagem de sucesso
+            String tipo = entrada ? "adicionada" : "removida";
+            JOptionPane.showMessageDialog(this, "Quantidade " + tipo + " com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Digite um valor válido!", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void carregarCategoriasNoComboBox() {
         ComboBoxCategoria.removeAllItems();
         categoriasMap.clear();
@@ -402,22 +453,21 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
         if (linha == -1) {
             JOptionPane.showMessageDialog(this, "Selecione um produto para alterar.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
-
         }
 
-        // Validação dos campos numéricos
-        double preco;
-        int qtdEstoque, qtdMin, qtdMax;
+        Integer id = (Integer) JTableProdutos.getValueAt(linha, 0); // pega o ID do produto
+        String nome = JTFNomeProduto.getText().trim();
+        Double preco = Double.parseDouble(JTFPrecoUnitario.getText());
+        String unidade = ComboBoxUnidade.getSelectedItem().toString();
+        Integer qtdEstoque = Integer.parseInt(JTFQtdEstoque.getText());
+        Integer qtdMin = Integer.parseInt(JTFQtdMinima.getText());
+        Integer qtdMax = Integer.parseInt(JTFQtdMaxima.getText());
+        Integer categoriaId = categoriasMap.get(ComboBoxCategoria.getSelectedItem().toString());
 
-        try {
-            preco = Double.parseDouble(JTFPrecoUnitario.getText());
-            qtdEstoque = Integer.parseInt(JTFQtdEstoque.getText());
-            qtdMin = Integer.parseInt(JTFQtdMinima.getText());
-            qtdMax = Integer.parseInt(JTFQtdMaxima.getText());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Valores numéricos inválidos!", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        Produto produto = new Produto(id, nome, preco, unidade, categoriaId, qtdEstoque, qtdMin, qtdMax);
+
+        // Atualiza no banco
+        produtoControlador.atualizarProduto(produto);
 
         // Atualiza os valores na tabela
         JTableProdutos.setValueAt(JTFNomeProduto.getText(), linha, 1);
@@ -448,6 +498,8 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
 
         if (confirm == JOptionPane.YES_OPTION) {
             // Remove a linha da tabela
+            Integer id = (Integer) JTableProdutos.getValueAt(linha, 0);
+            produtoControlador.deletarProduto(id);
             DefaultTableModel model = (DefaultTableModel) JTableProdutos.getModel();
             model.removeRow(linha);
 
@@ -466,12 +518,12 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
 
 
     private void jBEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEntradaActionPerformed
-
+    alterarEstoque(true); 
     }//GEN-LAST:event_jBEntradaActionPerformed
 
 
     private void jBSaidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSaidaActionPerformed
-
+        alterarEstoque(false);
     }//GEN-LAST:event_jBSaidaActionPerformed
 
 
