@@ -4,16 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import controlador.CategoriaControlador;
 import controlador.ProdutoControlador;
 import dto.Resposta;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import modelo.Categoria;
 import modelo.Produto;
@@ -427,7 +421,7 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
         JTFQtdMaxima.setText("");
         ComboBoxUnidade.setSelectedIndex(0);
         ComboBoxCategoria.setSelectedIndex(0);
-
+        carregarProdutosNaTela();
     }//GEN-LAST:event_JBNovoProdutoActionPerformed
 
 
