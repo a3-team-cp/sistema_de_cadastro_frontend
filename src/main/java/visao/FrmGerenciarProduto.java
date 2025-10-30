@@ -410,17 +410,16 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
         String nomeCategoria = (String) ComboBoxCategoria.getSelectedItem();
         Integer categoriaId = categoriasMap.get(nomeCategoria);
 
+        if (categoriaId == null) {
+            JOptionPane.showMessageDialog(this, "Erro: nenhuma categoria selecionada", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         Produto produto = new Produto(null, nome, precoUni, unidade, categoriaId, estoque, minima, maxima);
 
         // Chama o controlador para criar o produto
         produtoControlador.criarProduto(produto);
-        JTFNomeProduto.setText("");
-        JTFPrecoUnitario.setText("");
-        JTFQtdEstoque.setText("");
-        JTFQtdMinima.setText("");
-        JTFQtdMaxima.setText("");
-        ComboBoxUnidade.setSelectedIndex(0);
-        ComboBoxCategoria.setSelectedIndex(0);
+        limparCampos();
         carregarProdutosNaTela();
     }//GEN-LAST:event_JBNovoProdutoActionPerformed
 
@@ -498,13 +497,7 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
             model.removeRow(linha);
 
             // Limpa os campos de texto e combos
-            JTFNomeProduto.setText("");
-            JTFPrecoUnitario.setText("");
-            ComboBoxUnidade.setSelectedIndex(0);
-            JTFQtdEstoque.setText("");
-            JTFQtdMinima.setText("");
-            JTFQtdMaxima.setText("");
-            ComboBoxCategoria.setSelectedIndex(0);
+            limparCampos();
 
             JOptionPane.showMessageDialog(this, "Produto excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -512,13 +505,28 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
 
 
     private void jBEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEntradaActionPerformed
-    alterarEstoque(true); 
+        alterarEstoque(true);
     }//GEN-LAST:event_jBEntradaActionPerformed
 
 
     private void jBSaidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSaidaActionPerformed
         alterarEstoque(false);
     }//GEN-LAST:event_jBSaidaActionPerformed
+
+    public void limparCampos() {
+        // Limpa todos os campos de texto
+        JTFNomeProduto.setText("");
+        JTFPrecoUnitario.setText("");
+        JTFQtdEstoque.setText("");
+        JTFQtdMinima.setText("");
+        JTFQtdMaxima.setText("");
+        jTEntradaSaida.setText("");
+
+        // Reseta os ComboBox para o primeiro item
+        ComboBoxUnidade.setSelectedIndex(0);
+        ComboBoxCategoria.setSelectedIndex(0);
+
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

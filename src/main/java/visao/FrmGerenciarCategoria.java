@@ -6,6 +6,7 @@ import dto.Resposta;
 import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Categoria;
 import modelo.enums.Embalagem;
@@ -26,6 +27,7 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
         initComponents();
         this.categoriaControlador = new CategoriaControlador();
         this.mapper = new ObjectMapper();
+        JTableCategoria.setColumnSelectionAllowed(true);
         tabela = new DefaultTableModel(colunas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -205,9 +207,26 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
 
     private void JBAlterarGerenciamentoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAlterarGerenciamentoCActionPerformed
         Integer linhaSelecionada = JTableCategoria.getSelectedRow();
-        int id = (Integer) JTableCategoria.getValueAt(linhaSelecionada, 0);
 
-        String nome = JTFNomeDeCategoria.getText();
+        if (linhaSelecionada == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Selecione uma categoria para alterar.",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int id = (Integer) JTableCategoria.getValueAt(linhaSelecionada, 0);
+        String nome = JTFNomeDeCategoria.getText().trim();
+
+        // Validação do nome
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "O nome da categoria não pode estar vazio.",
+                    "Erro de Validação",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         String strTamanho = CBBoxCatTamanho.getSelectedItem().toString().toUpperCase();
         String tamanhoNormalizado = TextoUtil.removerAcentos(strTamanho);
@@ -218,58 +237,94 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
         Embalagem embalagem = Embalagem.valueOf(embalagemNormalizado);
 
         Categoria cat = new Categoria(id, nome, tamanho, embalagem);
+        Resposta<?> resposta = categoriaControlador.atualizarCategoria(cat);
 
-        categoriaControlador.atualizarCategoria(cat);
-        carregarCategoriasNaTela();
+        if ("sucesso".equalsIgnoreCase(resposta.getStatus())) {
+            JOptionPane.showMessageDialog(this,
+                    "Categoria atualizada com sucesso!", // Confirmação simples
+                    "Sucesso",
+                    JOptionPane.INFORMATION_MESSAGE);
+            carregarCategoriasNaTela();
+            limparCampos();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Erro ao alterar categoria: " + resposta.getMensagem(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_JBAlterarGerenciamentoCActionPerformed
 
     private void JTableCategoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTableCategoriaMouseClicked
-        int linhaSelecionada = JTableCategoria.getSelectedRow();
-        if (linhaSelecionada != -1) {
-            // Pega os valores da linha
-            String nome = JTableCategoria.getValueAt(linhaSelecionada, 1).toString();
-            String tamanho = JTableCategoria.getValueAt(linhaSelecionada, 2).toString();
-            String embalagem = JTableCategoria.getValueAt(linhaSelecionada, 3).toString();
-
-            // Coloca no campo de texto
-            JTFNomeDeCategoria.setText(nome);
-
-            // Normaliza para comparação segura
-            String tamanhoNorm = TextoUtil.normalizar(tamanho);
-            String embalagemNorm = TextoUtil.normalizar(embalagem);
-
-            // Seleciona o tamanho na comboBox
-            for (int i = 0; i < CBBoxCatTamanho.getItemCount(); i++) {
-                String itemNorm = TextoUtil.normalizar(CBBoxCatTamanho.getItemAt(i));
-                if (itemNorm.equals(tamanhoNorm)) {
-                    CBBoxCatTamanho.setSelectedIndex(i);
-                    break;
-                }
-            }
-
-            // Seleciona a embalagem na comboBox
-            for (int i = 0; i < CBBoxCatTipo.getItemCount(); i++) {
-                String itemNorm = TextoUtil.normalizar(CBBoxCatTipo.getItemAt(i));
-                if (itemNorm.equals(embalagemNorm)) {
-                    CBBoxCatTipo.setSelectedIndex(i);
-                    break;
-                }
-            }
+        int linha = JTableCategoria.getSelectedRow();
+        if (linha == -1) {
+            return;
         }
+
+        JTFNomeDeCategoria.setText(JTableCategoria.getValueAt(linha, 1) != null ? JTableCategoria.getValueAt(linha, 1).toString() : "");
+        CBBoxCatTamanho.setSelectedItem(JTableCategoria.getValueAt(linha, 2) != null ? JTableCategoria.getValueAt(linha, 2).toString() : "");
+        CBBoxCatTipo.setSelectedItem(JTableCategoria.getValueAt(linha, 3) != null ? JTableCategoria.getValueAt(linha, 3).toString() : "");
 
     }//GEN-LAST:event_JTableCategoriaMouseClicked
 
     private void JBExcluirGerenciamentoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBExcluirGerenciamentoCActionPerformed
         int linha = JTableCategoria.getSelectedRow();
-        if (linha >= 0) {
-            Integer id = (Integer) JTableCategoria.getValueAt(linha, 0);
-            categoriaControlador.deletarCategoria(id);
-            carregarCategoriasNaTela();
+        if (linha == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Selecione uma categoria para excluir.",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Integer id = (Integer) JTableCategoria.getValueAt(linha, 0);
+        String nomeCategoria = JTableCategoria.getValueAt(linha, 1).toString();
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Tem certeza que deseja excluir esta categoria?\nEsta ação não pode ser desfeita.",
+                "Confirmação de Exclusão",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            Resposta<?> resposta = categoriaControlador.deletarCategoria(id);
+
+            if ("sucesso".equalsIgnoreCase(resposta.getStatus())) {
+                JOptionPane.showMessageDialog(this,
+                        "Categoria '" + nomeCategoria + "' excluída com sucesso!",
+                        "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE);
+                carregarCategoriasNaTela();
+                limparCampos();
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Erro ao excluir categoria: " + resposta.getMensagem(),
+                        "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            System.out.println("EXCEÇÃO: " + e.getMessage());
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Erro ao excluir categoria: " + e.getMessage(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_JBExcluirGerenciamentoCActionPerformed
 
     private void BtnCriarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCriarCategoriaActionPerformed
-        String nome = JTFNomeDeCategoria.getText();
+        String nome = JTFNomeDeCategoria.getText().trim();
+
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "O nome da categoria não pode estar vazio.",
+                    "Erro de Validação",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         String strTamanho = CBBoxCatTamanho.getSelectedItem().toString().toUpperCase();
         String tamanhoNormalizado = TextoUtil.removerAcentos(strTamanho);
@@ -280,10 +335,28 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
         Embalagem embalagem = Embalagem.valueOf(embalagemNormalizado);
 
         Categoria cat = new Categoria(null, nome, tamanho, embalagem);
-        categoriaControlador.criarCategoria(cat);
-        carregarCategoriasNaTela();
+        Resposta<?> resposta = categoriaControlador.criarCategoria(cat);
+
+        if ("sucesso".equalsIgnoreCase(resposta.getStatus())) {
+            JOptionPane.showMessageDialog(this,
+                    "Categoria criada com sucesso!",
+                    "Sucesso",
+                    JOptionPane.INFORMATION_MESSAGE);
+            carregarCategoriasNaTela();
+            limparCampos();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Erro ao criar categoria: " + resposta.getMensagem(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_BtnCriarCategoriaActionPerformed
 
+    private void limparCampos() {
+        JTFNomeDeCategoria.setText("");
+        CBBoxCatTamanho.setSelectedIndex(0);
+        CBBoxCatTipo.setSelectedIndex(0);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnCriarCategoria;
