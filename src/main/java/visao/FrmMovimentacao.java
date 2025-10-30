@@ -1,21 +1,30 @@
 package visao;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import controlador.RegistroControlador;
+import dto.Resposta;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
+import modelo.Registro;
 
 public class FrmMovimentacao extends javax.swing.JFrame {
 
-   
+    private RegistroControlador registroControlador;
+
     private DefaultTableModel tabela;
+
+    private ObjectMapper mapper;
 
     private Object[][] dados = new Object[0][0];
 
-    
-    private String[] colunas = {"ID", "Data", "Tipo", "Quntidade", "Movimentação", "Status Estoque"};
+    private String[] colunas = {"ID", "Data", "Produto_id", "Quntidade", "Movimentação", "Status_Estoque"};
 
     public FrmMovimentacao() {
         initComponents();
+        this.registroControlador = new RegistroControlador();
+        this.mapper = new ObjectMapper();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         tabela = new DefaultTableModel(dados, colunas) {
@@ -29,6 +38,16 @@ public class FrmMovimentacao extends javax.swing.JFrame {
     }
 
     private void carregarRegistroNaTela() {
+        Resposta<?> resposta = registroControlador.listarRegistro();
+
+        Registro[] registroArray = mapper.convertValue(resposta.getDados(), Registro[].class);
+
+        List<Registro> registro = Arrays.asList(registroArray);
+
+        tabela.setRowCount(0);
+        for (Registro r : registro) {
+            tabela.addRow(new Object[]{r.getId(), r.getData(), r.getProdutoId(), r.getQuantidade(), r.getMovimentacao(), r.getStatus()});
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -50,13 +69,13 @@ public class FrmMovimentacao extends javax.swing.JFrame {
         jTableRegistro.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jTableRegistro.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Nome", "ID", "Tipo", "Qtd", "Data", "Movimentação", "Status Estoque"
+                "ID", "Data", "Produto_Id", "Qtd", "Movimentação", "Status_Estoque"
             }
         ));
         jTableRegistro.getTableHeader().setReorderingAllowed(false);
