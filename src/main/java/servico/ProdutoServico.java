@@ -40,4 +40,14 @@ public class ProdutoServico {
         Requisicao<Void> req = new Requisicao<>(Acao.LISTAR, Entidade.PRODUTO, null);
         return ClientSocket.enviarRequisicao(req);
     }
+
+    public Resposta<?> aumentarPrecoProduto(Double percentual) {
+       Requisicao<Double> req = new Requisicao<>(Acao.AUMENTAR, Entidade.PRODUTO, percentual);
+        return ClientSocket.enviarRequisicao(req);
+    }
+
+    public Resposta<?> diminuirPrecoProduto(Double percentual) {
+        Requisicao<Double> req = new Requisicao<>(Acao.DIMINUIR, Entidade.PRODUTO, percentual);
+        return ClientSocket.enviarRequisicao(req);
+    }
 }

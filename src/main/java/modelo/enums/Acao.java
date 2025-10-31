@@ -9,7 +9,8 @@ public enum Acao {
     ENCONTRAR,
     ATUALIZAR,
     DELETAR,
-    LISTAR;
+    LISTAR,
+    AUMENTAR,
+    DIMINUIR;
 
 }
-

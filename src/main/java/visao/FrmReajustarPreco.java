@@ -1,13 +1,17 @@
 package visao;
 
+import controlador.ProdutoControlador;
+import dto.Resposta;
 import javax.swing.JFrame;
 import visao.FrmMenuPrincipal;
 
-
 public class FrmReajustarPreco extends javax.swing.JFrame {
+
+    private ProdutoControlador produtoControlador;
 
     public FrmReajustarPreco() {
         initComponents();
+        this.produtoControlador = new ProdutoControlador();
         carregarCategoriasNoComboBox();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
@@ -15,7 +19,7 @@ public class FrmReajustarPreco extends javax.swing.JFrame {
     private void carregarCategoriasNoComboBox() {
         ComboBoxReajuste.removeAllItems();
         ComboBoxReajuste.addItem("Todos Produtos");
-        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -126,11 +130,66 @@ public class FrmReajustarPreco extends javax.swing.JFrame {
     }//GEN-LAST:event_JBVoltarActionPerformed
 
     private void jBAumentarPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAumentarPrecoActionPerformed
-     
+        String texto = JTFAjustePorcentagem.getText().trim();
+
+        if (texto.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, informe o percentual!");
+            return;
+        }
+
+        try {
+            Double percentual = Double.parseDouble(texto);
+
+            if (percentual <= 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Percentual deve ser maior que zero!");
+                return;
+            }
+
+            Resposta<?> resposta = produtoControlador.aumentarPrecoProduto(percentual);
+
+            if ("sucesso".equals(resposta.getStatus())) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Preços aumentados com sucesso em " + percentual + "%!");
+                JTFAjustePorcentagem.setText("");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + resposta.getMensagem());
+            }
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, informe um percentual válido!");
+        }
      }//GEN-LAST:event_jBAumentarPrecoActionPerformed
 
     private void jBDiminuirPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDiminuirPrecoActionPerformed
-        
+        String texto = JTFAjustePorcentagem.getText().trim();
+
+        if (texto.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, informe o percentual!");
+            return;
+        }
+
+        try {
+            Double percentual = Double.parseDouble(texto);
+
+            if (percentual <= 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Percentual deve ser maior que zero!");
+                return;
+            }
+
+            if (percentual >= 100) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Percentual deve ser menor que cem!");
+                return;
+            }
+
+            Resposta<?> resposta = produtoControlador.diminuirPrecoProduto(percentual);
+
+            if ("sucesso".equals(resposta.getStatus())) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Preços diminuídos com sucesso em " + percentual + "%!");
+                JTFAjustePorcentagem.setText("");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + resposta.getMensagem());
+            }
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, informe um percentual válido!");
+        }
     }//GEN-LAST:event_jBDiminuirPrecoActionPerformed
 
 

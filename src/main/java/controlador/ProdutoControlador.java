@@ -31,4 +31,12 @@ public class ProdutoControlador {
     public Resposta<?> listarProduto() {
         return servico.listarProduto();
     }
+
+     public Resposta<?> aumentarPrecoProduto(Double percentual) {
+       return servico.aumentarPrecoProduto(percentual);
+    }
+     
+     public Resposta<?> diminuirPrecoProduto(Double percentual) {
+       return servico.diminuirPrecoProduto(percentual);
+    }
 }
