@@ -1,9 +1,22 @@
 package visao;
 
+import com.itextpdf.text.BaseColor;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import modelo.Relatorio;
+import servico.RelatorioServico;
 
 public class FrmEmitirRelatorio extends javax.swing.JFrame {
 
@@ -11,6 +24,7 @@ public class FrmEmitirRelatorio extends javax.swing.JFrame {
 
     public FrmEmitirRelatorio() {
         initComponents();
+
     }
 
     @SuppressWarnings("unchecked")
@@ -146,96 +160,160 @@ public class FrmEmitirRelatorio extends javax.swing.JFrame {
             return;
         }
 
-        int indexSelecionado = ComboBoxRelatorio.getSelectedIndex();
-        String tipoFormatacao = (String) ComboBoxArquivo.getSelectedItem();
-        String nomeDoArquivo = new File(caminhoArquivoSelecionado).getName().replaceFirst("[.][^.]+$", "");
+        try {
+            RelatorioServico servico = new RelatorioServico();
+            var resposta = servico.listarRelatorio();
 
-        switch (indexSelecionado) {
-            case 0:
-                if ("Excel".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                } else if ("Doc".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                } else if ("Pdf".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
+            if (!"sucesso".equalsIgnoreCase(resposta.getStatus())) {
+                JOptionPane.showMessageDialog(this, "Erro ao buscar relatórios: " + resposta.getMensagem());
+                return;
+            }
+
+            List<?> dados = (List<?>) resposta.getDados();
+            List<Relatorio> relatorios = new java.util.ArrayList<>();
+
+            for (Object obj : dados) {
+                if (obj instanceof java.util.Map) {
+                    java.util.Map<?, ?> map = (java.util.Map<?, ?>) obj;
+
+                    Relatorio r = new Relatorio();
+                    r.setId(((Number) map.get("id")).intValue());
+                    r.setProdutoId(((Number) map.get("produtoId")).intValue());
+                    r.setNomeProduto((String) map.get("nomeProduto"));
+                    r.setQuantidade(((Number) map.get("quantidade")).intValue());
+                    r.setMovimentacao((String) map.get("movimentacao"));
+                    r.setStatus((String) map.get("status"));
+
+                    Object dataObj = map.get("data");
+                    if (dataObj != null) {
+                        try {
+                            long timestamp = Long.parseLong(dataObj.toString());
+                            r.setData(new java.util.Date(timestamp));
+                        } catch (NumberFormatException ex) {
+                            r.setData(null); // caso ocorra erro
+                        }
+                    }
+
+                    relatorios.add(r);
                 }
-            case 1:
-                if ("Excel".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                } else if ("Doc".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                } else if ("Pdf".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                }
-            case 2:
-                if ("Excel".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                } else if ("Doc".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                } else if ("Pdf".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                }
-            case 3:
-                if ("Excel".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                } else if ("Doc".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                } else if ("Pdf".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                }
-            case 4:
-                if ("Excel".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                } else if ("Doc".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                } else if ("Pdf".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                }
-            case 5:
-                if ("Excel".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                } else if ("Doc".equalsIgnoreCase(tipoFormatacao)) {
-                    break;
-                } else if ("Pdf".equalsIgnoreCase(tipoFormatacao)) {
-                }
+            }
+
+            gerarPdf(relatorios, caminhoArquivoSelecionado);
+            JOptionPane.showMessageDialog(this, "Relatório gerado com sucesso em:\n" + caminhoArquivoSelecionado);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao gerar relatório: " + e.getMessage());
         }
+
     }//GEN-LAST:event_JBEmitirActionPerformed
 
 
     private void JBSalvarcomoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSalvarcomoActionPerformed
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Salvar como");
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Arquivos PDF", "pdf"));
 
-        String tipoFormatacao = (String) ComboBoxArquivo.getSelectedItem();
-        FileNameExtensionFilter filtro;
-
-        if ("PDF".equalsIgnoreCase(tipoFormatacao)) {
-            filtro = new FileNameExtensionFilter("Arquivos PDF", "pdf");
-            fileChooser.setFileFilter(filtro);
-        } else if ("Excel".equalsIgnoreCase(tipoFormatacao)) {
-            filtro = new FileNameExtensionFilter("Arquivos Excel", "xlsx");
-            fileChooser.setFileFilter(filtro);
-        } else if ("Doc".equalsIgnoreCase(tipoFormatacao)) {
-            filtro = new FileNameExtensionFilter("Arquivos DOC", "docx");
-            fileChooser.setFileFilter(filtro);
-        }
-
-        int resultado = fileChooser.showSaveDialog(null);
+        int resultado = fileChooser.showSaveDialog(this);
         if (resultado == JFileChooser.APPROVE_OPTION) {
             File arquivo = fileChooser.getSelectedFile();
             caminhoArquivoSelecionado = arquivo.getAbsolutePath();
 
-            // Garante a extensão
-            if ("PDF".equalsIgnoreCase(tipoFormatacao) && !caminhoArquivoSelecionado.toLowerCase().endsWith(".pdf")) {
+            if (!caminhoArquivoSelecionado.toLowerCase().endsWith(".pdf")) {
                 caminhoArquivoSelecionado += ".pdf";
-            } else if ("Excel".equalsIgnoreCase(tipoFormatacao) && !caminhoArquivoSelecionado.toLowerCase().endsWith(".xlsx")) {
-                caminhoArquivoSelecionado += ".xlsx";
-            } else if ("Doc".equalsIgnoreCase(tipoFormatacao) && !caminhoArquivoSelecionado.toLowerCase().endsWith(".docx")) {
-                caminhoArquivoSelecionado += ".docx";
             }
+
             JTFCaminhoArquivo.setText(caminhoArquivoSelecionado);
         }
     }//GEN-LAST:event_JBSalvarcomoActionPerformed
+
+    private void gerarPdf(List<Relatorio> relatorios, String caminhoArquivo) {
+        try {
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(caminhoArquivo));
+            document.open();
+
+            // ====== Título ======
+            Font tituloFont = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
+            Paragraph titulo = new Paragraph("RELATÓRIO DE MOVIMENTAÇÕES", tituloFont);
+            titulo.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(titulo);
+
+            // Data de geração
+            Font dataFont = new Font(Font.FontFamily.HELVETICA, 10);
+            Paragraph dataGeracao = new Paragraph("Gerado em: " + new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new Date()), dataFont);
+            dataGeracao.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(dataGeracao);
+
+            document.add(new Paragraph(" ")); // Espaço
+
+            // ====== Tabela ======
+            PdfPTable table = new PdfPTable(6);
+            table.setWidthPercentage(100);
+            table.setWidths(new float[]{1f, 2f, 3f, 1.5f, 2f, 2f});
+
+            // Cabeçalho com cor
+            Font cabecalhoFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
+            String[] cabecalho = {"ID", "Data/Hora", "Produto", "Quantidade", "Movimentação", "Status"};
+            for (String col : cabecalho) {
+                PdfPCell cell = new PdfPCell(new Paragraph(col, cabecalhoFont));
+                cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                cell.setBackgroundColor(new BaseColor(220, 220, 220)); // Cinza mais escuro
+                cell.setPadding(5);
+                table.addCell(cell);
+            }
+
+            // Dados da tabela
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            Font dadosFont = new Font(Font.FontFamily.HELVETICA, 9);
+
+            for (Relatorio r : relatorios) {
+                PdfPCell idCell = new PdfPCell(new Paragraph(String.valueOf(r.getId()), dadosFont));
+                idCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                idCell.setPadding(4);
+                table.addCell(idCell);
+
+                PdfPCell dataCell = new PdfPCell(new Paragraph(sdf.format(r.getData()), dadosFont));
+                dataCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                dataCell.setPadding(4);
+                table.addCell(dataCell);
+
+                PdfPCell produtoCell = new PdfPCell(new Paragraph(r.getNomeProduto(), dadosFont));
+                produtoCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+                produtoCell.setPadding(4);
+                table.addCell(produtoCell);
+
+                PdfPCell qtdCell = new PdfPCell(new Paragraph(String.valueOf(r.getQuantidade()), dadosFont));
+                qtdCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                qtdCell.setPadding(4);
+                table.addCell(qtdCell);
+
+                PdfPCell movCell = new PdfPCell(new Paragraph(r.getMovimentacao(), dadosFont));
+                movCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                movCell.setPadding(4);
+                table.addCell(movCell);
+
+                PdfPCell statusCell = new PdfPCell(new Paragraph(r.getStatus(), dadosFont));
+                statusCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                statusCell.setPadding(4);
+                table.addCell(statusCell);
+            }
+
+            document.add(table);
+
+            // Total de registros
+            Font totalFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
+            Paragraph total = new Paragraph("Total de registros: " + relatorios.size(), totalFont);
+            total.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(new Paragraph(" "));
+            document.add(total);
+
+            document.close();
+            JOptionPane.showMessageDialog(null, "PDF gerado com sucesso!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao gerar PDF: " + e.getMessage());
+        }
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
