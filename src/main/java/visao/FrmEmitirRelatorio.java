@@ -49,7 +49,7 @@ public class FrmEmitirRelatorio extends javax.swing.JFrame {
         jLabel1.setText("Emitir Relatórios");
 
         ComboBoxArquivo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        ComboBoxArquivo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Excel", "Doc", "PDF" }));
+        ComboBoxArquivo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PDF" }));
 
         JBVoltar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         JBVoltar.setText("Voltar");
@@ -80,7 +80,7 @@ public class FrmEmitirRelatorio extends javax.swing.JFrame {
             }
         });
 
-        ComboBoxRelatorio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lista de preço", "Balanço físico/financeiro", "Relatório de produtos abaixo da quantidade mínima", "Relatório de produtos acima da quantidade máxima", "Relatório da quantidade de produtos por categoria", "Relatório de movimentação" }));
+        ComboBoxRelatorio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Relatório De Movimentação" }));
         ComboBoxRelatorio.setPreferredSize(new java.awt.Dimension(323, 24));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
