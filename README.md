@@ -95,77 +95,12 @@ O sistema deve gerar relatórios nos formatos Excel, DOC ou PDF.
 
 ---
 
-## 🧱 Estrutura do Banco de Dados
-
-**Tabela: categoria**
-
-| Campo     | Tipo        | Descrição                                      |
-| ---------- | ------------ | --------------------------------------------- |
-| id         | INT          | Identificador único (auto incremento)         |
-| nome       | VARCHAR(100) | Nome da categoria                             |
-| tamanho    | ENUM         | Tamanho da categoria (‘PEQUENO’, ‘MEDIO’, ‘GRANDE’) |
-| embalagem  | ENUM         | Tipo de embalagem (‘PLASTICO’, ‘LATA’, ‘VIDRO’) |
-| ativo      | BOOLEAN      | Indica se a categoria está ativa (padrão: TRUE) |
-
----
-
-**Tabela: produto**
-
-| Campo              | Tipo          | Descrição                                               |
-| ------------------ | ------------- | ------------------------------------------------------- |
-| id                 | INT           | Identificador único (auto incremento)                   |
-| nome               | VARCHAR(100)  | Nome do produto                                         |
-| preco_unitario     | DECIMAL(10,2) | Preço unitário do produto                               |
-| unidade            | VARCHAR(100)  | Unidade de medida (kg, litro, ml, etc.)                 |
-| quantidade         | INT           | Quantidade atual em estoque                             |
-| quantidade_minima  | INT           | Quantidade mínima permitida                             |
-| quantidade_maxima  | INT           | Quantidade máxima permitida                             |
-| categoria_id       | INT           | Chave estrangeira que referencia a tabela categoria     |
-| ativo              | BOOLEAN       | Indica se o produto está ativo (soft delete, padrão: TRUE) |
-
----
-
-**Tabela: registro**
-
-| Campo        | Tipo         | Descrição                                                               |
-| ------------- | ------------- | ----------------------------------------------------------------------- |
-| id            | INT          | Identificador único (auto incremento)                                   |
-| data          | TIMESTAMP    | Data e hora da movimentação                                            |
-| produto_id    | INT          | Chave estrangeira que referencia o produto movimentado                 |
-| quantidade    | INT          | Quantidade movimentada                                                 |
-| movimentacao  | ENUM         | Tipo de movimentação (‘NENHUM’, ‘ENTRADA’, ‘SAIDA’)                    |
-| status        | ENUM         | Estado da movimentação (‘ACIMA’, ‘ABAIXO’, ‘DENTRO’, ‘ADICIONADO’, ‘NOMEALTERADO’, ‘DELETADO’, ‘NENHUM’) |
-
----
-
-🗄️ **Relações entre tabelas**
-- Cada **produto** pertence a uma **categoria** (`categoria_id` → `categoria.id`).
-- Cada **registro** está associado a um **produto** (`produto_id` → `produto.id`).
-
----
-
-💡 **Observação:**  
-O campo `ativo` nas tabelas `categoria` e `produto` permite a implementação de *soft delete*, ou seja, exclusões lógicas sem remover os dados do banco.
-
----
-
 ## ⚙️ Tecnologias Utilizadas
 
-- **Java 21** — Linguagem principal do projeto  
-- **Maven 3.9.9** — Gerenciador de dependências e build  
-- **MySQL 8.0.42** — Banco de dados relacional  
-- **JDBC 9.2.0** — Conexão entre Java e MySQL  
+- **Java 21** — Versão utilizada pelo Maven para compilação  
+- **Maven** — Gerenciador de dependências e build do projeto  
 - **Jackson Databind 2.16.0** — Manipulação e conversão de objetos JSON  
-- **iTextPDF 5.5.13.3** — Geração de relatórios e documentos em PDF  
-- **IDE:** NetBeans 21
-
-
-## ⚙️ Configurando o Banco de Dados MySQL
-
-- Para rodar o programa é necessário fazer o download do **MySQL Workbench 8.0**.  
-- Acesse o arquivo [`banco.sql`](banco.sql) para criar o banco de dados.  
-- **Usuário:** root  
-- **Senha:** 1234567  
+- **iTextPDF 5.5.13.3** — Geração e manipulação de arquivos PDF  
 
 ---
 
