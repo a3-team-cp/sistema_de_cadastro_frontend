@@ -5,7 +5,7 @@ package visao;
  * Serve como ponto de entrada para todas as funcionalidades do sistema através
  * de botões e um menu de navegação.
  *
- * @author Victor
+ * @author
  */
 public class FrmMenuPrincipal extends javax.swing.JFrame {
 

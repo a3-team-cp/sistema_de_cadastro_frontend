@@ -1,13 +1,13 @@
-package controlador;
+    package controlador;
 
-import dto.Resposta;
-import servico.RelatorioServico;
+    import dto.Resposta;
+    import servico.RelatorioServico;
 
-public class RelatorioControlador {
+    public class RelatorioControlador {
 
-    private final RelatorioServico servico = new RelatorioServico();
-    
-    public Resposta<?> listarRelatorio() {
-        return servico.listarRelatorio();
+        private final RelatorioServico servico = new RelatorioServico();
+
+        public Resposta<?> listarRelatorio() {
+            return servico.listarRelatorio();
+        }
     }
-}
