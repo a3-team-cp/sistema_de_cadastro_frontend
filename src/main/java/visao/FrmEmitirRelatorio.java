@@ -18,13 +18,35 @@ import java.util.List;
 import modelo.Relatorio;
 import servico.RelatorioServico;
 
+/**
+ * Formulário para emissão de relatórios em formato PDF.
+ *
+ * <p>
+ * Esta interface permite ao usuário selecionar o tipo de relatório, escolher o
+ * local de salvamento e gerar documentos PDF formatados com os dados de
+ * movimentação do sistema.</p>
+ *
+ * <p>
+ * Utiliza a biblioteca iText para geração de PDFs com layout profissional
+ * incluindo tabelas formatadas, cabeçalhos e totais.</p>
+ */
 public class FrmEmitirRelatorio extends javax.swing.JFrame {
 
+    /**
+     * Caminho do arquivo selecionado para salvamento do relatório.
+     *
+     * <p>
+     * Armazena o caminho completo (incluindo nome do arquivo e extensão .pdf)
+     * onde o relatório será salvo. O valor é definido através do diálogo de
+     * seleção de arquivo.</p>
+     */
     private String caminhoArquivoSelecionado = null;
 
+    /**
+     * Construtor que inicializa os componentes da interface.
+     */
     public FrmEmitirRelatorio() {
         initComponents();
-
     }
 
     @SuppressWarnings("unchecked")
@@ -148,12 +170,45 @@ public class FrmEmitirRelatorio extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Retorna ao menu principal quando o botão Voltar é acionado.
+     *
+     * @param evt evento de ação do botão
+     */
     private void JBVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBVoltarActionPerformed
         FrmMenuPrincipal janela = new FrmMenuPrincipal();
         janela.setVisible(true);
         this.dispose();    }//GEN-LAST:event_JBVoltarActionPerformed
 
-
+    /**
+     * Processa a emissão do relatório quando o botão Emitir é acionado.
+     *
+     * <p>
+     * Recupera os dados do servidor através do RelatorioServico, converte os
+     * dados para objetos Relatorio e gera o arquivo PDF no local selecionado
+     * pelo usuário.</p>
+     *
+     * <p>
+     * <b>Fluxo de execução:</b></p>
+     * <ol>
+     * <li>Valida se um local de salvamento foi selecionado</li>
+     * <li>Recupera dados do relatório do servidor</li>
+     * <li>Converte os dados para objetos Relatorio</li>
+     * <li>Chama o método de geração do PDF</li>
+     * <li>Exibe feedback sobre o resultado da operação</li>
+     * </ol>
+     *
+     * <p>
+     * <b>Tratamento de erros:</b></p>
+     * <ul>
+     * <li>Local de salvamento não selecionado</li>
+     * <li>Erro na comunicação com o servidor</li>
+     * <li>Falha na conversão dos dados</li>
+     * <li>Erro na geração do arquivo PDF</li>
+     * </ul>
+     *
+     * @param evt evento de ação do botão
+     */
     private void JBEmitirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEmitirActionPerformed
         if (caminhoArquivoSelecionado == null) {
             JOptionPane.showMessageDialog(null, "Você precisa selecionar onde salvar o arquivo (clique em 'Salvar como').");
@@ -208,7 +263,24 @@ public class FrmEmitirRelatorio extends javax.swing.JFrame {
 
     }//GEN-LAST:event_JBEmitirActionPerformed
 
-
+    /**
+     * Abre diálogo para seleção do local de salvamento do arquivo PDF.
+     *
+     * <p>
+     * Exibe um seletor de arquivos nativo do sistema operacional para que o
+     * usuário possa escolher o diretório e nome do arquivo onde o relatório
+     * será salvo.</p>
+     *
+     * <p>
+     * <b>Funcionalidades:</b></p>
+     * <ul>
+     * <li>Filtra apenas arquivos PDF</li>
+     * <li>Adiciona automaticamente extensão .pdf se não informada</li>
+     * <li>Atualiza o campo de texto com o caminho selecionado</li>
+     * </ul>
+     *
+     * @param evt evento de ação do botão
+     */
     private void JBSalvarcomoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSalvarcomoActionPerformed
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Salvar como");
@@ -227,6 +299,17 @@ public class FrmEmitirRelatorio extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_JBSalvarcomoActionPerformed
 
+    /**
+     * Gera o arquivo PDF com os dados do relatório formatados.
+     *
+     * <p>
+     * Cria um documento PDF profissional com cabeçalho, tabela de dados e
+     * rodapé contendo o total de registros. A tabela inclui formatação com
+     * cores e alinhamentos específicos para melhor legibilidade.</p>
+     *
+     * @param relatorios lista de registros a serem incluídos no relatório
+     * @param caminhoArquivo caminho completo onde o arquivo será salvo
+     */
     private void gerarPdf(List<Relatorio> relatorios, String caminhoArquivo) {
         try {
             Document document = new Document();

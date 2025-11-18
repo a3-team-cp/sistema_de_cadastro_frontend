@@ -13,16 +13,43 @@ import modelo.enums.Embalagem;
 import modelo.enums.Tamanho;
 import util.TextoUtil;
 
+/**
+ * Formulário para gerenciamento de categorias do sistema.
+ *
+ * <p>
+ * Esta interface permite realizar operações CRUD (Criar, Ler, Atualizar,
+ * Deletar) sobre as categorias de produtos, incluindo visualização em tabela e
+ * manipulação individual dos registros.</p>
+ *
+ * <p>
+ * Utiliza um controlador para comunicação com a camada de serviço e formatação
+ * adequada dos dados para exibição na interface gráfica.</p>
+ */
 public class FrmGerenciarCategoria extends javax.swing.JFrame {
 
+    /**
+     * Controlador responsável pelas operações de categoria.
+     */
     private CategoriaControlador categoriaControlador;
 
+    /**
+     * Mapeador JSON para conversão de objetos.
+     */
     private ObjectMapper mapper;
 
+    /**
+     * Modelo de dados para a tabela de categorias.
+     */
     private DefaultTableModel tabela;
 
+    /**
+     * Nomes das colunas da tabela de categorias.
+     */
     private String[] colunas = {"ID", "Nome", "Tamanho", "Embalagem"};
 
+    /**
+     * Construtor que inicializa os componentes e configura a interface.
+     */
     public FrmGerenciarCategoria() {
         initComponents();
         this.categoriaControlador = new CategoriaControlador();
@@ -38,11 +65,24 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
         carregarCategoriasNaTela();
     }
 
+    /**
+     * Remove acentos e caracteres diacríticos de uma string.
+     *
+     * @param texto texto a ser normalizado
+     * @return texto sem acentos e caracteres diacríticos
+     */
     public static String removerAcentos(String texto) {
         return Normalizer.normalize(texto, Normalizer.Form.NFD)
                 .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
 
+    /**
+     * Carrega todas as categorias do servidor e exibe na tabela.
+     *
+     * <p>
+     * Recupera a lista de categorias através do controlador, converte os dados
+     * para o formato adequado e popula a tabela da interface gráfica.</p>
+     */
     private void carregarCategoriasNaTela() {
         Resposta<?> resposta = categoriaControlador.listarCategoria();
 
@@ -195,16 +235,35 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Evento disparado quando a janela é aberta.
+     *
+     * @param evt evento de abertura da janela
+     */
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         carregarCategoriasNaTela();
     }//GEN-LAST:event_formWindowOpened
 
+    /**
+     * Retorna ao menu principal quando o botão Voltar é acionado.
+     *
+     * @param evt evento de ação do botão
+     */
     private void JBVoltarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBVoltarCategoriaActionPerformed
         FrmMenuPrincipal janela = new FrmMenuPrincipal();
         janela.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_JBVoltarCategoriaActionPerformed
 
+    /**
+     * Processa a alteração de uma categoria existente.
+     *
+     * <p>
+     * Recupera os dados da linha selecionada na tabela, valida as entradas e
+     * envia a solicitação de atualização para o servidor.</p>
+     *
+     * @param evt evento de ação do botão
+     */
     private void JBAlterarGerenciamentoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAlterarGerenciamentoCActionPerformed
         Integer linhaSelecionada = JTableCategoria.getSelectedRow();
 
@@ -254,6 +313,18 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_JBAlterarGerenciamentoCActionPerformed
 
+    /**
+     * Preenche os campos do formulário quando uma linha da tabela é
+     * selecionada.
+     *
+     * <p>
+     * Quando o usuário clica em uma linha da tabela de categorias, este método
+     * automaticamente preenche os campos de edição (nome, tamanho e embalagem)
+     * com os dados da categoria selecionada, permitindo alteração ou
+     * exclusão.</p>
+     *
+     * @param evt evento de clique do mouse na tabela
+     */
     private void JTableCategoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTableCategoriaMouseClicked
         int linha = JTableCategoria.getSelectedRow();
         if (linha == -1) {
@@ -266,6 +337,25 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
 
     }//GEN-LAST:event_JTableCategoriaMouseClicked
 
+    /**
+     * Processa a exclusão de uma categoria selecionada.
+     *
+     * <p>
+     * Solicita confirmação do usuário antes de proceder com a exclusão e envia
+     * a solicitação para o servidor após confirmação. Exibe feedback adequado
+     * sobre o resultado da operação.</p>
+     *
+     * <p>
+     * <b>Fluxo da operação:</b></p>
+     * <ol>
+     * <li>Verifica se uma categoria foi selecionada</li>
+     * <li>Solicita confirmação do usuário</li>
+     * <li>Envia requisição de exclusão</li>
+     * <li>Recarrega a tabela em caso de sucesso</li>
+     * </ol>
+     *
+     * @param evt evento de ação do botão
+     */
     private void JBExcluirGerenciamentoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBExcluirGerenciamentoCActionPerformed
         int linha = JTableCategoria.getSelectedRow();
         if (linha == -1) {
@@ -315,6 +405,22 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_JBExcluirGerenciamentoCActionPerformed
 
+    /**
+     * Processa a criação de uma nova categoria.
+     *
+     * <p>
+     * Valida os dados informados pelo usuário e envia a solicitação de criação
+     * para o servidor. Após sucesso, recarrega a tabela e limpa os campos.</p>
+     *
+     * <p>
+     * <b>Validações realizadas:</b></p>
+     * <ul>
+     * <li>Nome da categoria não pode estar vazio</li>
+     * <li>Conversão dos valores dos combobox para os enums correspondentes</li>
+     * </ul>
+     *
+     * @param evt evento de ação do botão
+     */
     private void BtnCriarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCriarCategoriaActionPerformed
         String nome = JTFNomeDeCategoria.getText().trim();
 
@@ -352,6 +458,15 @@ public class FrmGerenciarCategoria extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_BtnCriarCategoriaActionPerformed
 
+    /**
+     * Limpa todos os campos de entrada do formulário, restaurando-os para seus
+     * valores padrão.
+     *
+     * <p>
+     * Este método é utilizado após operações de criação, atualização ou
+     * exclusão para preparar a interface para uma nova interação do
+     * usuário.</p>
+     */
     private void limparCampos() {
         JTFNomeDeCategoria.setText("");
         CBBoxCatTamanho.setSelectedIndex(0);

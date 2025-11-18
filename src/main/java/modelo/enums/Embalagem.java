@@ -1,13 +1,23 @@
 package modelo.enums;
 
 /**
+ * Enumeração que define os tipos de embalagem disponíveis para produtos.
  *
- * @author diego
+ * <p>
+ * Representa os diferentes materiais de embalagem que podem ser utilizados para
+ * acondicionar produtos no sistema.</p>
  */
 public enum Embalagem {
-    
+    /**
+     * Embalagem do tipo lata
+     */
     LATA,
+    /**
+     * Embalagem do tipo vidro
+     */
     VIDRO,
-    PLASTICO
-    
+    /**
+     * Embalagem do tipo plástico
+     */
+    PLASTICO;
 }

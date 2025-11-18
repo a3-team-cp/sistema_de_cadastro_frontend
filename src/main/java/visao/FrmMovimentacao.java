@@ -9,18 +9,48 @@ import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import modelo.Registro;
 
+/**
+ * Formulário para visualização das movimentações de estoque do sistema.
+ *
+ * <p>
+ * Esta interface exibe um histórico completo de todas as movimentações
+ * realizadas no estoque, incluindo entradas, saídas e seus respectivos status,
+ * permitindo o acompanhamento das operações realizadas.</p>
+ *
+ * <p>
+ * Apresenta os dados em formato de tabela com informações detalhadas sobre cada
+ * movimentação registrada no sistema.</p>
+ */
 public class FrmMovimentacao extends javax.swing.JFrame {
 
+    /**
+     * Controlador responsável pelas operações de registro.
+     */
     private RegistroControlador registroControlador;
 
+    /**
+     * Modelo de dados para a tabela de movimentações.
+     */
     private DefaultTableModel tabela;
 
+    /**
+     * Mapeador JSON para conversão de objetos.
+     */
     private ObjectMapper mapper;
 
+    /**
+     * Dados iniciais da tabela.
+     */
     private Object[][] dados = new Object[0][0];
 
+    /**
+     * Nomes das colunas da tabela de movimentações.
+     */
     private String[] colunas = {"ID", "Data", "Produto_id", "Quntidade", "Movimentação", "Status_Estoque"};
 
+    /**
+     * Construtor que inicializa os componentes e configura a interface.
+     */
     public FrmMovimentacao() {
         initComponents();
         this.registroControlador = new RegistroControlador();
@@ -37,6 +67,22 @@ public class FrmMovimentacao extends javax.swing.JFrame {
         carregarRegistroNaTela();
     }
 
+    /**
+     * Carrega todos os registros de movimentação do servidor e exibe na tabela.
+     *
+     * <p>
+     * Recupera a lista completa de movimentações através do controlador e
+     * popula a tabela da interface gráfica com os dados obtidos.</p>
+     *
+     * <p>
+     * <b>Processamento:</b></p>
+     * <ul>
+     * <li>Limpa a tabela atual</li>
+     * <li>Busca registros do servidor</li>
+     * <li>Converte os dados para objetos Registro</li>
+     * <li>Popula a tabela com os dados formatados</li>
+     * </ul>
+     */
     private void carregarRegistroNaTela() {
         Resposta<?> resposta = registroControlador.listarRegistro();
 
@@ -121,6 +167,16 @@ public class FrmMovimentacao extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Retorna ao menu principal quando o botão Voltar é acionado.
+     *
+     * <p>
+     * Fecha a janela atual de movimentações e retorna ao menu principal
+     * da aplicação, permitindo ao usuário navegar para outras funcionalidades
+     * do sistema.</p>
+     *
+     * @param evt evento de ação do botão
+     */
     private void JBVoltarMovimentacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBVoltarMovimentacaoActionPerformed
         FrmMenuPrincipal janela = new FrmMenuPrincipal();
         janela.setVisible(true);

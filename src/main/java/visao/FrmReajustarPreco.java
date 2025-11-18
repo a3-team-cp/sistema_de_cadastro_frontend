@@ -3,12 +3,28 @@ package visao;
 import controlador.ProdutoControlador;
 import dto.Resposta;
 import javax.swing.JFrame;
-import visao.FrmMenuPrincipal;
 
+/**
+ * Formulário para reajuste de preços dos produtos do sistema.
+ *
+ * <p>
+ * Esta interface permite aplicar aumentos ou reduções percentuais nos preços de
+ * todos os produtos do sistema de forma rápida e centralizada.</p>
+ *
+ * <p>
+ * Oferece controle sobre o percentual de ajuste e validações para garantir a
+ * integridade dos dados durante as operações de reajuste.</p>
+ */
 public class FrmReajustarPreco extends javax.swing.JFrame {
 
+    /**
+     * Controlador responsável pelas operações de produto.
+     */
     private ProdutoControlador produtoControlador;
 
+    /**
+     * Construtor que inicializa os componentes e configura a interface.
+     */
     public FrmReajustarPreco() {
         initComponents();
         this.produtoControlador = new ProdutoControlador();
@@ -16,6 +32,13 @@ public class FrmReajustarPreco extends javax.swing.JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
+    /**
+     * Carrega as opções disponíveis no ComboBox de reajuste.
+     *
+     * <p>
+     * Configura as opções disponíveis para reajuste de preços.
+     * Atualmente configurado para reajustar todos os produtos.</p>
+     */
     private void carregarCategoriasNoComboBox() {
         ComboBoxReajuste.removeAllItems();
         ComboBoxReajuste.addItem("Todos Produtos");
@@ -123,12 +146,40 @@ public class FrmReajustarPreco extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Retorna ao menu principal quando o botão Voltar é acionado.
+     *
+     * <p>
+     * Fecha a janela atual de reajuste de preços e retorna ao menu principal
+     * da aplicação, permitindo ao usuário navegar para outras funcionalidades
+     * do sistema.</p>
+     *
+     * @param evt evento de ação do botão
+     */
     private void JBVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBVoltarActionPerformed
         FrmMenuPrincipal janela = new FrmMenuPrincipal();
         janela.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_JBVoltarActionPerformed
 
+    /**
+     * Processa o aumento percentual nos preços de todos os produtos.
+     *
+     * <p>
+     * Valida o percentual informado e aplica o aumento através do controlador,
+     * exibindo mensagens de sucesso ou erro conforme o resultado da
+     * operação.</p>
+     *
+     * <p>
+     * <b>Validações realizadas:</b></p>
+     * <ul>
+     * <li>Verifica se o campo não está vazio</li>
+     * <li>Valida se o percentual é maior que zero</li>
+     * <li>Converte o valor para número</li>
+     * </ul>
+     *
+     * @param evt evento de ação do botão
+     */
     private void jBAumentarPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAumentarPrecoActionPerformed
         String texto = JTFAjustePorcentagem.getText().trim();
 
@@ -158,6 +209,24 @@ public class FrmReajustarPreco extends javax.swing.JFrame {
         }
      }//GEN-LAST:event_jBAumentarPrecoActionPerformed
 
+      /**
+     * Processa a redução percentual nos preços de todos os produtos.
+     *
+     * <p>
+     * Valida o percentual informado (deve ser menor que 100%) e aplica a
+     * redução através do controlador, exibindo mensagens de sucesso ou erro
+     * conforme o resultado.</p>
+     *
+     * <p>
+     * <b>Validações realizadas:</b></p>
+     * <ul>
+     * <li>Verifica se o campo não está vazio</li>
+     * <li>Valida se o percentual é maior que zero e menor que 100</li>
+     * <li>Converte o valor para número</li>
+     * </ul>
+     *
+     * @param evt evento de ação do botão
+     */
     private void jBDiminuirPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDiminuirPrecoActionPerformed
         String texto = JTFAjustePorcentagem.getText().trim();
 

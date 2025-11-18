@@ -9,15 +9,48 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import util.JsonUtil;
 
-/**s
+/**
+ * Cliente socket responsável pela comunicação com o servidor via TCP/IP.
  *
- * @author diego
+ * <p>Esta classe fornece métodos estáticos para enviar requisições ao servidor e
+ * receber respostas, utilizando JSON como formato de serialização de dados.</p>
+ *
+ * <p>Gerencia automaticamente a conexão socket, incluindo abertura e fechamento de
+ * recursos, garantindo o uso adequado de recursos do sistema.</p>
+ *
+ * <p>Utiliza o padrão try-with-resources para garantir que os recursos de rede
+ * sejam fechados adequadamente, mesmo em caso de exceções.</p>
  */
 public class ClientSocket {
     
+    /** Endereço do servidor ao qual as requisições serão enviadas. */
     private static final String HOST = "localhost";
+    
+    /** Porta do servidor na qual o serviço está escutando. */
     private static final int PORTA = 3001;
 
+    /**
+     * Construtor privado para impedir instanciação da classe.
+     *
+     * <p>Esta classe é um utilitário com métodos estáticos e não deve
+     * ser instanciada.</p>
+     */
+    private ClientSocket() {
+        // Impede instanciação
+    }
+
+    /**
+     * Envia uma requisição para o servidor e retorna a resposta recebida.
+     *
+     * <p>Estabelece uma conexão socket com o servidor, serializa a requisição
+     * em formato JSON, envia os dados e aguarda a resposta do servidor.</p>
+     *
+     * <p>Em caso de erro de comunicação, retorna uma resposta de erro padrão
+     * contendo informações sobre a falha ocorrida.</p>
+     *
+     * @param requisicao objeto Requisicao contendo os dados da requisição a ser enviada
+     * @return uma Resposta contendo o resultado processado pelo servidor ou mensagem de erro
+     */
     public static Resposta<?> enviarRequisicao(Requisicao<?> requisicao) {
         try (Socket socket = new Socket(HOST, PORTA);
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);

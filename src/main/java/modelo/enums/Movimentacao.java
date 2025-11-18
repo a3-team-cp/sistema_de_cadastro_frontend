@@ -1,13 +1,23 @@
 package modelo.enums;
 
 /**
+ * Enumeração que define os tipos de movimentação de estoque.
  *
- * @author diego
+ * <p>
+ * Representa as direções possíveis para movimentações de itens no controle de
+ * estoque do sistema.</p>
  */
 public enum Movimentacao {
-    
+    /**
+     * Nenhuma movimentação
+     */
     NENHUM,
+    /**
+     * Movimentação de entrada no estoque
+     */
     ENTRADA,
-    SAIDA
-    
+    /**
+     * Movimentação de saída do estoque
+     */
+    SAIDA;
 }

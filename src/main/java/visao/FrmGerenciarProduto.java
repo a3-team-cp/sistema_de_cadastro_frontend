@@ -12,18 +12,58 @@ import javax.swing.table.DefaultTableModel;
 import modelo.Categoria;
 import modelo.Produto;
 
+/**
+ * Formulário para gerenciamento de produtos do sistema.
+ *
+ * <p>
+ * Esta interface permite realizar operações CRUD completas sobre produtos,
+ * incluindo controle de estoque através de entradas e saídas, e associação com
+ * categorias existentes no sistema.</p>
+ *
+ * <p>
+ * Utiliza controladores para comunicação com a camada de serviço e mantém
+ * sincronização entre a interface gráfica e os dados do servidor.</p>
+ */
 public class FrmGerenciarProduto extends javax.swing.JFrame {
 
+    /**
+     * Modelo de dados para a tabela de produtos.
+     */
     private DefaultTableModel tabela;
+
+    /**
+     * Controlador responsável pelas operações de produto.
+     */
     private ProdutoControlador produtoControlador;
+
+    /**
+     * Controlador responsável pelas operações de categoria.
+     */
     private CategoriaControlador categoriaControlador;
+
+    /**
+     * Mapeador JSON para conversão de objetos.
+     */
     private ObjectMapper mapper;
+
+    /**
+     * Mapa para relacionar nomes de categorias com seus respectivos IDs.
+     */
     private Map<String, Integer> categoriasMap;
 
+    /**
+     * Dados iniciais da tabela.
+     */
     private Object[][] dados = new Object[0][0];
 
+    /**
+     * Nomes das colunas da tabela de produtos.
+     */
     private String[] colunas = {"ID", "Nome", "Preço", "Unidade", "Qtd Estoque", "Qtd Mínima", "Qtd Máxima", "Categoria"};
 
+    /**
+     * Construtor que inicializa os componentes e configura a interface.
+     */
     public FrmGerenciarProduto() {
         initComponents();
         this.produtoControlador = new ProdutoControlador();
@@ -43,6 +83,27 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
         carregarProdutosNaTela();
     }
 
+    /**
+     * Processa a alteração de estoque (entrada ou saída) de um produto.
+     *
+     * <p>
+     * Realiza a movimentação de estoque para o produto selecionado na tabela,
+     * atualizando a quantidade no banco de dados e refletindo a alteração na
+     * interface.</p>
+     *
+     * <p>
+     * <b>Fluxo de execução:</b></p>
+     * <ol>
+     * <li>Valida se um produto foi selecionado na tabela</li>
+     * <li>Converte o valor informado para inteiro</li>
+     * <li>Busca o produto atual no banco de dados</li>
+     * <li>Calcula a nova quantidade (adiciona ou subtrai)</li>
+     * <li>Atualiza o produto no banco</li>
+     * <li>Recarrega a tabela e limpa o campo</li>
+     * </ol>
+     *
+     * @param entrada true para entrada de estoque, false para saída
+     */
     private void alterarEstoque(boolean entrada) {
         int linha = JTableProdutos.getSelectedRow();
         if (linha == -1) {
@@ -94,6 +155,23 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Carrega todas as categorias disponíveis no ComboBox de categorias.
+     *
+     * <p>
+     * Recupera a lista de categorias do servidor e popula o ComboBox com os
+     * nomes das categorias, mantendo um mapa interno para relacionar os nomes
+     * com seus respectivos IDs.</p>
+     *
+     * <p>
+     * <b>Processamento:</b></p>
+     * <ul>
+     * <li>Remove todos os itens existentes do ComboBox</li>
+     * <li>Limpa o mapa de categorias</li>
+     * <li>Busca categorias do servidor</li>
+     * <li>Adiciona cada categoria ao ComboBox e ao mapa</li>
+     * </ul>
+     */
     private void carregarCategoriasNoComboBox() {
         ComboBoxCategoria.removeAllItems();
         categoriasMap.clear();
@@ -107,6 +185,22 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Carrega todos os produtos do servidor e exibe na tabela.
+     *
+     * <p>
+     * Recupera a lista completa de produtos e suas categorias correspondentes,
+     * formatando os dados para exibição na tabela da interface gráfica.</p>
+     *
+     * <p>
+     * <b>Processamento:</b></p>
+     * <ul>
+     * <li>Limpa a tabela atual</li>
+     * <li>Busca produtos e categorias do servidor</li>
+     * <li>Mapeia IDs de categoria para nomes</li>
+     * <li>Popula a tabela com os dados formatados</li>
+     * </ul>
+     */
     private void carregarProdutosNaTela() {
         tabela.setRowCount(0);
 
@@ -391,13 +485,50 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Retorna ao menu principal quando o botão Voltar é acionado.
+     *
+     * <p>
+     * Fecha a janela atual de gerenciamento de produtos e retorna ao menu
+     * principal da aplicação, permitindo ao usuário navegar para outras
+     * funcionalidades do sistema.</p>
+     *
+     * <p>
+     * <b>Comportamento:</b></p>
+     * <ul>
+     * <li>Cria uma nova instância do menu principal</li>
+     * <li>Torna o menu principal visível</li>
+     * <li>Fecha e libera os recursos da janela atual de produtos</li>
+     * </ul>
+     *
+     * <p>
+     * <b>Observação:</b> Utiliza <code>DISPOSE_ON_CLOSE</code> para liberar
+     * recursos sem encerrar toda a aplicação.</p>
+     *
+     * @param evt evento de ação do botão Voltar
+     */
     private void JBVoltarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBVoltarProdutoActionPerformed
         FrmMenuPrincipal janela = new FrmMenuPrincipal();
         janela.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_JBVoltarProdutoActionPerformed
 
-
+    /**
+     * Processa a criação de um novo produto.
+     *
+     * <p>
+     * Coleta os dados dos campos do formulário, valida as informações e envia a
+     * solicitação de criação para o servidor.</p>
+     *
+     * <p>
+     * <b>Validações realizadas:</b></p>
+     * <ul>
+     * <li>Verifica se uma categoria foi selecionada</li>
+     * <li>Converte os valores numéricos para os tipos apropriados</li>
+     * </ul>
+     *
+     * @param evt evento de ação do botão
+     */
     private void JBNovoProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBNovoProdutoActionPerformed
         String nome = JTFNomeProduto.getText().trim();
         Double precoUni = Double.valueOf(JTFPrecoUnitario.getText().trim());
@@ -423,7 +554,17 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
         carregarProdutosNaTela();
     }//GEN-LAST:event_JBNovoProdutoActionPerformed
 
-
+    /**
+     * Preenche os campos do formulário quando uma linha da tabela é
+     * selecionada.
+     *
+     * <p>
+     * Quando o usuário clica em uma linha da tabela de produtos, este método
+     * automaticamente preenche todos os campos do formulário com os dados do
+     * produto selecionado, permitindo edição ou exclusão.</p>
+     *
+     * @param evt evento de clique do mouse na tabela
+     */
     private void JTableProdutosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTableProdutosMouseClicked
         int linha = JTableProdutos.getSelectedRow();
         if (linha == -1) {
@@ -440,7 +581,25 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
 
     }//GEN-LAST:event_JTableProdutosMouseClicked
 
-
+    /**
+     * Processa a alteração de um produto existente.
+     *
+     * <p>
+     * Atualiza os dados do produto selecionado com as informações modificadas
+     * nos campos do formulário.</p>
+     *
+     * <p>
+     * <b>Fluxo de execução:</b></p>
+     * <ol>
+     * <li>Valida se um produto foi selecionado</li>
+     * <li>Coleta os dados dos campos do formulário</li>
+     * <li>Converte os valores para os tipos apropriados</li>
+     * <li>Envia a atualização para o servidor</li>
+     * <li>Atualiza a linha correspondente na tabela</li>
+     * </ol>
+     *
+     * @param evt evento de ação do botão
+     */
     private void JBAlterarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAlterarProdutoActionPerformed
         int linha = JTableProdutos.getSelectedRow();
         if (linha == -1) {
@@ -475,7 +634,25 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
 
     }//GEN-LAST:event_JBAlterarProdutoActionPerformed
 
-
+    /**
+     * Processa a exclusão de um produto selecionado.
+     *
+     * <p>
+     * Solicita confirmação do usuário antes de excluir o produto e remove o
+     * registro do banco de dados e da tabela.</p>
+     *
+     * <p>
+     * <b>Fluxo de execução:</b></p>
+     * <ol>
+     * <li>Valida se um produto foi selecionado</li>
+     * <li>Solicita confirmação do usuário</li>
+     * <li>Remove o produto do banco de dados</li>
+     * <li>Remove a linha da tabela</li>
+     * <li>Limpa os campos do formulário</li>
+     * </ol>
+     *
+     * @param evt evento de ação do botão
+     */
     private void JBExcluirProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBExcluirProdutoActionPerformed
         int linha = JTableProdutos.getSelectedRow();
         if (linha == -1) {
@@ -503,16 +680,44 @@ public class FrmGerenciarProduto extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_JBExcluirProdutoActionPerformed
 
-
+    /**
+     * Processa a entrada de estoque para o produto selecionado.
+     *
+     * <p>
+     * Adiciona a quantidade especificada ao estoque do produto selecionado.</p>
+     *
+     * @param evt evento de ação do botão
+     */
     private void jBEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEntradaActionPerformed
         alterarEstoque(true);
     }//GEN-LAST:event_jBEntradaActionPerformed
 
-
+    /**
+     * Processa a saída de estoque para o produto selecionado.
+     *
+     * <p>
+     * Subtrai a quantidade especificada do estoque do produto selecionado.</p>
+     *
+     * @param evt evento de ação do botão
+     */
     private void jBSaidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSaidaActionPerformed
         alterarEstoque(false);
     }//GEN-LAST:event_jBSaidaActionPerformed
 
+    /**
+     * Limpa todos os campos de entrada do formulário.
+     *
+     * <p>
+     * Restaura todos os campos para seus valores iniciais, preparando o
+     * formulário para uma nova interação do usuário.</p>
+     *
+     * <p>
+     * <b>Ações realizadas:</b></p>
+     * <ul>
+     * <li>Limpa todos os campos de texto</li>
+     * <li>Reseta os ComboBox para o primeiro item</li>
+     * </ul>
+     */
     public void limparCampos() {
         // Limpa todos os campos de texto
         JTFNomeProduto.setText("");

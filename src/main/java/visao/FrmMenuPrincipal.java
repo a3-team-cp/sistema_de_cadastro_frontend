@@ -5,15 +5,19 @@ package visao;
  * Serve como ponto de entrada para todas as funcionalidades do sistema através
  * de botões e um menu de navegação.
  *
- * @author
+ * <p>
+ * Esta interface centraliza o acesso a todos os módulos do sistema, permitindo
+ * navegação intuitiva entre as diferentes funcionalidades de gestão de
+ * produtos, categorias, preços e relatórios.</p>
  */
 public class FrmMenuPrincipal extends javax.swing.JFrame {
 
- 
+    /**
+     * Construtor que inicializa os componentes da interface principal.
+     */
     public FrmMenuPrincipal() {
         initComponents();
     }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -188,36 +192,89 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-  
+    /**
+     * Encerra a aplicação quando o botão Sair é acionado.
+     *
+     * <p>
+     * Finaliza completamente a execução do sistema de controle de estoque,
+     * liberando todos os recursos alocados.</p>
+     *
+     * @param evt evento de ação do botão
+     */
     private void JBSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSairActionPerformed
         System.exit(0);
     }//GEN-LAST:event_JBSairActionPerformed
 
-  
+    /**
+     * Abre o formulário de gerenciamento de produtos.
+     *
+     * <p>
+     * Navega para a tela de gerenciamento de produtos onde o usuário pode
+     * realizar operações CRUD (criar, ler, atualizar, deletar) sobre os
+     * produtos do sistema.</p>
+     *
+     * @param evt evento de ação do botão
+     */
     private void JBGerenciarProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBGerenciarProdutosActionPerformed
         FrmGerenciarProduto janela = new FrmGerenciarProduto();
         janela.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_JBGerenciarProdutosActionPerformed
 
+    /**
+     * Abre o formulário de emissão de relatórios através do menu.
+     *
+     * <p>
+     * Navega para a tela de emissão de relatórios através do menu Arquivo,
+     * proporcionando acesso alternativo à funcionalidade.</p>
+     *
+     * @param evt evento de ação do item de menu
+     */
     private void JBEmitirRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEmitirRelatoriosActionPerformed
         FrmEmitirRelatorio janela = new FrmEmitirRelatorio();
         janela.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_JBEmitirRelatoriosActionPerformed
 
+    /**
+     * Abre o formulário de gerenciamento de categorias.
+     *
+     * <p>
+     * Navega para a tela de gerenciamento de categorias onde o usuário pode
+     * realizar operações CRUD sobre as categorias de produtos.</p>
+     *
+     * @param evt evento de ação do botão
+     */
     private void JBGerenciarCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBGerenciarCategoriasActionPerformed
         FrmGerenciarCategoria janela = new FrmGerenciarCategoria();
         janela.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_JBGerenciarCategoriasActionPerformed
 
+    /**
+     * Abre o formulário de gerenciamento de categorias através do menu.
+     *
+     * <p>
+     * Navega para a tela de gerenciamento de categorias através do menu
+     * Arquivo, proporcionando acesso alternativo à funcionalidade.</p>
+     *
+     * @param evt evento de ação do item de menu
+     */
     private void jMenuGerenciarCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGerenciarCategoriasActionPerformed
         FrmGerenciarCategoria janela = new FrmGerenciarCategoria();
         janela.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuGerenciarCategoriasActionPerformed
 
+    /**
+     * Abre o formulário de gerenciamento de produtos através do menu.
+     *
+     * <p>
+     * Navega para a tela de gerenciamento de produtos através do menu Arquivo,
+     * proporcionando acesso alternativo à funcionalidade.</p>
+     *
+     * @param evt evento de ação do item de menu
+     */
     private void jMenuGerenciarProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGerenciarProdutosActionPerformed
         // Instancia a tela de cadastro de aluno
         FrmGerenciarProduto objeto = new FrmGerenciarProduto();
@@ -225,25 +282,58 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jMenuGerenciarProdutosActionPerformed
 
+    /**
+     * Abre o formulário de reajuste de preços.
+     *
+     * <p>
+     * Navega para a tela de reajuste de preços onde o usuário pode aplicar
+     * percentuais de aumento ou redução nos preços dos produtos.</p>
+     *
+     * @param evt evento de ação do botão
+     */
     private void JBReajustarPrecosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBReajustarPrecosActionPerformed
         FrmReajustarPreco janela = new FrmReajustarPreco();
         janela.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_JBReajustarPrecosActionPerformed
 
-  
+    /**
+     * Encerra a aplicação através do menu.
+     *
+     * <p>
+     * Finaliza completamente a execução do sistema através da opção de menu
+     * Arquivo → Sair.</p>
+     *
+     * @param evt evento de ação do item de menu
+     */
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
- 
+    /**
+     * Abre o formulário de reajuste de preços através do menu.
+     *
+     * <p>
+     * Navega para a tela de reajuste de preços através do menu Arquivo,
+     * proporcionando acesso alternativo à funcionalidade.</p>
+     *
+     * @param evt evento de ação do item de menu
+     */
     private void jMenuReajustarPrecosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuReajustarPrecosActionPerformed
         FrmReajustarPreco janela = new FrmReajustarPreco();
         janela.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuReajustarPrecosActionPerformed
 
-   
+    /**
+     * Abre o formulário de movimentação de estoque.
+     *
+     * <p>
+     * Navega para a tela de movimentação de estoque onde o usuário pode
+     * registrar entradas e saídas de produtos do estoque.</p>
+     *
+     * @param evt evento de ação do botão
+     */
     private void jBMovimentacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBMovimentacaoActionPerformed
         FrmMovimentacao janela = new FrmMovimentacao();
         janela.setVisible(true);
